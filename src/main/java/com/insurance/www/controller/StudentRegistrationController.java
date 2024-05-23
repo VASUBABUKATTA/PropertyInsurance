@@ -94,7 +94,7 @@ public ResponseEntity<Object> upDateStructureDetailsById(@PathVariable Long id,
         studentRegistrationRepository.save(existingDetails);
 
         // return ResponseEntity.ok("Student details updated successfully");
-        return ResponseEntity.status(HttpStatus.OK).body("Student details updated successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Student details updated successfully");
     } else {
         // If the resource does not exist, return HTTP status 404 (Not Found)
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found");
