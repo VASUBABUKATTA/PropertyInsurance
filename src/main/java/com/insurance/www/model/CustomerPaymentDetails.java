@@ -1,5 +1,7 @@
 package com.insurance.www.model;
 
+import java.time.LocalDate;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +33,24 @@ public class CustomerPaymentDetails
 		description = "paymentId of the customer", example = "pay_NwodIhujTHQwyG"
 	)
     private String paymentId;
+
+	private LocalDate startingDate;
+
+	private LocalDate expiryDate;
     
+	
+	public LocalDate getStartingDate() {
+		return startingDate;
+	}
+	public void setStartingDate(LocalDate startingDate) {
+		this.startingDate = startingDate;
+	}
+	public LocalDate getExpiryDate() {
+		return expiryDate;
+	}
+	public void setExpiryDate(LocalDate expiryDate) {
+		this.expiryDate = expiryDate;
+	}
 	public long getId() {
 		return id;
 	}

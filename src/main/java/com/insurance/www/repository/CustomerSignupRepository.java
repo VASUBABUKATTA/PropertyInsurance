@@ -28,4 +28,6 @@ public interface CustomerSignupRepository extends JpaRepository<CustomerSignup, 
 
     List<CustomerSignup> findByMobileno(String mobileno);
 
+	
+
 }

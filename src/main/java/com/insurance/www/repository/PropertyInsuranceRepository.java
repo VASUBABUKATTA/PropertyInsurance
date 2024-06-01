@@ -12,6 +12,8 @@ public interface PropertyInsuranceRepository extends JpaRepository<StructureAndD
 {
 
 	Optional<List<StructureAndDetails>> findByCustomerId(String customerId);
+
+	List<StructureAndDetails> findByPaymentId(String string);
 	
 }
 

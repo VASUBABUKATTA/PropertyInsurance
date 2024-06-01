@@ -15,6 +15,8 @@ public interface CustomerPaymentDetailsRepository extends JpaRepository<Customer
 
 	List<CustomerPaymentDetails> findByCustomerId(String customerId);
 
+	List<CustomerPaymentDetails> findByPaymentId(String string);
+
 
 	
 

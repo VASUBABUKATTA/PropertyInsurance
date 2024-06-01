@@ -31,6 +31,7 @@ import com.insurance.www.model.CustomerSignup;
 import com.insurance.www.model.EmailQuotePageEntity;
 import com.insurance.www.model.EmailRequest;
 import com.insurance.www.model.FillDetails;
+import com.insurance.www.model.QuoteDataTabularFormate;
 import com.insurance.www.model.StructureAndDetails;
 import com.insurance.www.service.InvoiceService;
 import com.insurance.www.service.PropertyInsuranceService;
@@ -610,25 +611,30 @@ public String EmailUpdation(@PathVariable String toEmail)
 
 
 
-	
-	    private InvoiceService invoiceService;
+	@Autowired
+	private InvoiceService invoiceService;
 
 		// to create Invoice
-	    @GetMapping("/create")
-	    public void createPdf(HttpServletResponse response) {
+	@GetMapping("/create/{paymentId}")
+	public void createPdf(HttpServletResponse response, @PathVariable String paymentId) {
 	        // Setting content type and response headers
-	        response.setContentType("application/pdf");
-	        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.pdf");
+		response.setContentType("application/pdf");
+	    response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.pdf");
 
-	        try {
-	            invoiceService.export(response);
-	        } catch (DocumentException | IOException e) {
+	     try {
+	            invoiceService.export(response, paymentId);
+	   		 } catch (DocumentException | IOException e) {
 	            e.printStackTrace();
-	        }
+	      }
 	    }
 
+  	//to send an email to user at quotepage
+	@PostMapping("/emailQuotePageTabularFormate/{toEmail}")
+	public String emailQuotePageTabularFormate(@PathVariable String toEmail,@RequestBody QuoteDataTabularFormate  qdtf)
+	{
+		return propertyInsuranceService.sendEmailQuotePageTabularFormate(toEmail, qdtf);
+	}
 
-		
 
 
 	

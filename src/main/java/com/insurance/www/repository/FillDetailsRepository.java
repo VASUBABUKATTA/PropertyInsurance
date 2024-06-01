@@ -15,6 +15,8 @@ public interface FillDetailsRepository extends JpaRepository<FillDetails , Long 
 
 	List<FillDetails> findByCustomerId(String customerId);
 
+	List<FillDetails> findByPaymentId(String string);
+
 	
 	
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +35,7 @@ import com.insurance.www.model.CustomerSignup;
 import com.insurance.www.model.EmailQuotePageEntity;
 import com.insurance.www.model.EmailRequest;
 import com.insurance.www.model.FillDetails;
+import com.insurance.www.model.QuoteDataTabularFormate;
 import com.insurance.www.model.StructureAndDetails;
 import com.insurance.www.repository.CustomerLoginRepository;
 import com.insurance.www.repository.CustomerPaymentDetailsRepository;
@@ -159,6 +161,8 @@ public class PropertyInsuranceService
 	
 	public CustomerPaymentDetails createPaymentData(CustomerPaymentDetails data )
 	{
+        data.setStartingDate(LocalDate.now());
+        data.setExpiryDate(data.getStartingDate().minusDays(1).plusYears(data.getYear()));
 		return customerPaymentDetailsRepository.save(data);
 	}
 	
@@ -501,7 +505,7 @@ public class PropertyInsuranceService
             .append("Thank you for signing up with RS Insurance pvt ltd. To complete your registration, please use the OTP provided below to verify your email address.").append("<br/>")
             .append("<h3>").append("OTP: "+otp).append("</h3>")
             .append("Please keep this OTP confidential and do not share it with anyone.").append("<br/>").append("<br/>")
-            .append("If you did not request this OTP, please ignore this email.").append("<br/>")
+            .append("If you did not request this OTP, please ignore this email.").append("<br/>").append("<br/>")
             .append("Thank you for choosing RS Insurance pvt ltd")
             .append("<h5>").append("<br/>")
             .append(greeting).append("<br/>")
@@ -594,7 +598,7 @@ public class PropertyInsuranceService
             .append("We have received a request to update email address at RS Insurance pvt ltd. In order to finalize this change and we kindly ask you to verify this update by utilizing the OTP provided below:")
             .append("<h3>").append("OTP: "+otp).append("</h3>")
             .append("Please use this OTP to confirm the updation of your email address ").append("<br/>").append("<br/>")
-            .append("If you did not initiate this change, or if you have any concerns, please contact our support team immediately at support@rsinsurance.com or 1800-258-2465.").append("<br/>").append("<br/>")
+            .append("If you did not initiate this change, or if you have any concerns, please contact our support team immediately at support@ramanasoft.com or 1800-258-2465.").append("<br/>").append("<br/>")
             .append("If you did not request this OTP, please ignore this email.").append("<br/>").append("<br/>")
             .append("Thank you for choosing RS Insurance pvt ltd")
             .append("<h5>").append("<br/>")
@@ -779,6 +783,129 @@ public class PropertyInsuranceService
 	        // Delete the expired data
 	        eqpRepo.deleteAll(expiredData);
 	    }
+
+        //to send an email to user at quotepage
+        public String sendEmailQuotePageTabularFormate(String emailRequest, QuoteDataTabularFormate  qdtf)
+		{
+			String postUrl = "https://api.zeptomail.in/v1.1/email";
+	        StringBuffer sb = new StringBuffer();
+
+	        try {
+	        
+	        	
+	            URL url = new URL(postUrl);
+	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	            conn.setDoOutput(true);
+	            conn.setRequestMethod("POST");
+	            conn.setRequestProperty("Content-Type", "application/json");
+	            conn.setRequestProperty("Accept", "application/json");
+	            conn.setRequestProperty("Authorization", "Zoho-enczapikey PHtE6r0EFLjr3jMsp0QAt/+wE8TyN40tr+hmKFMVsIgUXqMFTk0Bqdl6wDPiqU8jXPJHR/ObzN5ttLOe5+ONdGrtZG1NXmqyqK3sx/VYSPOZsbq6x00etFUdcE3aUIbvetFq0ifQvdbcNA==");
+	           
+	            JSONObject requestBody = new JSONObject();
+	            JSONObject from = new JSONObject();
+	            String email="support@qtnext.com";
+	            from.put("address", email);
+	            requestBody.put("from", from);
+
+	            JSONObject to = new JSONObject();
+	            JSONObject emailAddress = new JSONObject();
+	            emailAddress.put("address", emailRequest);
+
+	            to.put("email_address", emailAddress);
+	            requestBody.put("to", new JSONObject[]{to});
+
+	            requestBody.put("subject", "Find Your Next Investment with RS Insurace pvt ltd.");
+	            List<QuoteDataTabularFormate > data = Arrays.asList(
+	                    new QuoteDataTabularFormate(qdtf.getMarketValue(),qdtf.getSquareFeet(),qdtf.getPincode(), qdtf.getYear(), qdtf.getPremium())
+
+	            );
+
+	            StringBuilder html = new StringBuilder();
+                html.append("<html>");
+		    	html.append("<head>");
+		    	html.append("<title>Quotation Details</title>");
+		    	html.append("<style>");
+		    	html.append("table, th, td { border: 1px solid black; border-collapse: collapse; }");
+		    	html.append("th, td { padding: 10px 20px; font-size: 16px;}"); // Adjust the padding values as needed
+		    	html.append("</style>");
+		    	html.append("</head>");
+		    	html.append("<body>");
+		    	html.append("<h1>Quotation Details</h1>");
+		    	html.append("<table>");
+		    	html.append("<tr><th>Market Value</th><th>Carpet Value</th><th>Property Pincode</th><th>Premium Year</th><th>Premium Amount</th></tr>");
+	            for (QuoteDataTabularFormate row : data) {
+	                html.append("<tr>")
+	                    .append("<td>").append(row.getMarketValue()).append("</td>")
+	                    .append("<td>").append(row.getSquareFeet()).append("</td>")
+	                    .append("<td>").append(row.getPincode()).append("</td>")
+	                    .append("<td>").append(row.getYear()).append("</td>")
+	                    .append("<td>").append(row.getPremium()).append("</td>")
+	                    .append("</tr>");
+	            }
+
+	            html.append("</table>");
+	            html.append("</body>");
+	            html.append("</html>");
+	            
+	            String greeting="Thanks & Regards";
+	            String ofcName="RS Insurance pvt ltd.";
+	            String phNo="1800-258-2465";
+	            String mail="support@ramanasoft.com";
+	            String address1="Madhapur, Hyderabad,";
+	            String address2="Telangana, India. 500081";
+	            
+
+	            
+	            StringBuffer stringBuffer=new StringBuffer();
+	            stringBuffer.append("Dear Customer,").append("<br/>").append("<br/>")
+	            .append("Thank you for choosing RS Insurance.").append("<br/>")
+	            .append("<br/>")
+	            .append("Here is your Quotation Details").append("<br/>").append("<br/>")
+	            .append("We appreciate your trust in our services and looking forward to serve your insurance needs.").append("<br/>").append("<br/>")
+	            .append("<h5>")
+	            .append(html).append("<br/>").append("<br/>")
+	            .append(greeting).append("<br/>")
+	            .append(ofcName).append("<br/>")
+	            .append(phNo).append("<br/>")
+	            .append(mail).append("<br/>")
+	            .append(address1).append("<br/>")
+	            .append(address2).append("</h5>");
+	             html.toString();
+	            requestBody.put("htmlbody",stringBuffer.toString());
+	            
+	            OutputStream os = conn.getOutputStream();
+	            os.write(requestBody.toString().getBytes());
+	            os.flush();
+
+	            BufferedReader br;
+	            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+	                br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	            } else {
+	                br = new BufferedReader(new InputStreamReader((conn.getErrorStream())));
+	            }
+
+	            String output;
+	            while ((output = br.readLine()) != null) {
+	                sb.append(output);
+	            }
+
+	            br.close();
+	            conn.disconnect();
+	           
+//	            RestTemplate
+	            
+//	            eqpRepo.save(eqpEntity);
+
+	            return "quote email succesfully";
+	        
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return "issue with quote email sending proccess";
+	        }
+	        
+	        
+
+		}
 
 
 }
