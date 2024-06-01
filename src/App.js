@@ -51,7 +51,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-    <ToastContainer autoClose={false}/>
+    <ToastContainer autoClose={5000} />
     </div>
   )
 }

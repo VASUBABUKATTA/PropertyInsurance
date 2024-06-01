@@ -17,6 +17,10 @@ export default function StrucureAndDetails() {
 
   const navigate=useNavigate();
 
+  useEffect(()=>{
+    window.scrollTo(0,0)
+  },[])
+
 
   const [showState , setshowState] = useState(false);
   const [showState1 , setshowState1] = useState(false);
@@ -53,7 +57,8 @@ export default function StrucureAndDetails() {
       person:""
   });
 
-     
+     var mobileno = location.state?.mobileno;
+     var emailId = location.state?.emailId;
 
         const [validationErrors,setValidationErrors]=useState({
           marketValue:"",
@@ -83,7 +88,7 @@ export default function StrucureAndDetails() {
           // validation --2 :
           else if (name === "squareFeet") {
             if (!regexpropertyValues.test(value)) {
-              setValidationErrors({ ...validationErrors, [name]: "The square feet value should be 100 to 100,000." });
+              setValidationErrors({ ...validationErrors, [name]: "The square feet value should be 100 to 99,999." });
             } else {
               setValidationErrors({ ...validationErrors, [name]: "" });
             }
@@ -155,7 +160,7 @@ export default function StrucureAndDetails() {
     {
       // Save values to sessionStorage before navigating
       sessionStorage.setItem('formValues', JSON.stringify(values));
-        navigate("/getQuote",{state:{formValues : values,i}});
+        navigate("/getQuote",{state:{formValues : values,i,emailId,mobileno}});
      
 
       // console.log("values =>"+JSON.stringify(values));
@@ -267,11 +272,11 @@ export default function StrucureAndDetails() {
             ),
           }}
         />
-      </div>
-      {validationErrors.squareFeet && <p className="text-danger mx-5 fw-bold">{validationErrors.squareFeet}</p>} <br></br>
+      </div><small>
+      {validationErrors.squareFeet && <p className="text-danger mx-5 fw-bold">{validationErrors.squareFeet}</p>}</small> 
     </div>
 
-    <div className="form-group ms-lg-5">
+    <div className="form-group ms-lg-5 mt-lg-3">
       <div className="">
         <TextField
           id="outlined-textarea"
@@ -303,7 +308,8 @@ export default function StrucureAndDetails() {
           }}
         />
       </div>
-      {validationErrors.pincode && <span className="text-danger mx-5 fw-bold">{validationErrors.pincode}</span>}
+      <small>
+      {validationErrors.pincode && <span className="text-danger mx-5 fw-bold">{validationErrors.pincode}</span>}</small>
     </div>
 
     <div className="form-group ms-lg-5 mt-3 fw-bold">

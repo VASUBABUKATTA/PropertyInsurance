@@ -9,6 +9,7 @@ import Switch from '@mui/material/Switch';
 import insurance from '../images/insurance.jpg';
 import safe from '../images/safe.png';
 import Header from '../Header';
+import { toast } from 'react-toastify';
 
 function PaymentPage() {
   useEffect(() => {
@@ -22,12 +23,15 @@ function PaymentPage() {
   const location = useLocation();
   const { state } = location;
 
+  // var mobilen = location.state?.mobileno;
+  // var emailId = location.state?.emailId;
+
   const formData = state?.formData;
   const premiumData = state?.premiumData;
 
   // data from signup page :
   const email = formData?.email;
-  const mobileno = formData?.mobileno;
+  // const mobileno = formData?.mobileno ;
   const userName=formData?.name;
   const userPassword = formData?.password;
 
@@ -54,7 +58,7 @@ function PaymentPage() {
   const fillDetailsAlluserRelated=state?.userDetails
   console.log(JSON.stringify(fillDetailsAlluserRelated));
   // console.log(Intialcity,Intialstate,fillDetailsAlluserRelated);
-
+console.log(fillDetailsAlluserRelated.mobno)
   // data from structure and details page :
 const marketValue = state?.marketValue;
 const security = state?.security;
@@ -65,16 +69,28 @@ const effected = state?.effected;
 const person = state?.person;
 
 //  const startingCustomerId = location.state?.startingCustomerId;
+const MobileNumberDta = formData.mobileno
+console.log(MobileNumberDta)
 
- 
+const mobileno = (MobileNumberDta === "" || MobileNumberDta === undefined) ? fillDetailsAlluserRelated.mobno : MobileNumberDta;
+
+
+ console.log(mobileno);
 const [signUpDetails, setSignUpDetails] = useState([]);
 
 useEffect(() => {
+
   if (mobileno) {
     PropertyInsuranceService.getCustomerIdByMobileNo(mobileno).then((res) => {
       setSignUpDetails(res.data);
-    });
+    })
   }
+  // else if (mobileno === ("" || undefined)){
+  //   const MobilenumberData = fillDetailsAlluserRelated.mobno;
+  //   PropertyInsuranceService.getCustomerIdByMobileNo(MobilenumberData).then((res) => {
+  //     setSignUpDetails(res.data);
+  //   })
+  // }
 }, [mobileno]);
  
   const amount = premium * 100;
@@ -197,8 +213,9 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
       PropertyInsuranceService.createfillDetails(dataValues);
       PropertyInsuranceService.createDetails(values)
 
-      alert("Payment SuccessFully Completed Thank You");
+      toast.success("Payment SuccessFully Completed Thank You");
       navigate("/");
+      toast.info("Please Login to Continue...");
 
       
     },

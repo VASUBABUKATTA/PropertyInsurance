@@ -36,6 +36,9 @@ function FilldetailsPage()
 
   const [showState , setshowState] = useState(false);
 
+  var mobileno = location.state?.mobileno;
+  var emailId = location.state?.emailId;
+
   // customer Id:
   const startingCustomerId = location.state?.startingCustomerId;
 
@@ -316,23 +319,33 @@ const [signUpDetails, setSignUpDetails] = useState(JSON.parse(sessionStorage.get
 
 function f1()
 {
-  if (formData?.mobileno) {
-    PropertyInsuranceService.getCustomerIdByMobileNo(formData?.mobileno)
+  if (formData?.mobileno != ("" || undefined) || mobileno) {
+    const phoneNumber= (formData?.mobileno != ("" || undefined)) ? mobileno : formData?.mobileno;
+    PropertyInsuranceService.getCustomerIdByMobileNo(phoneNumber)
       .then((res) => {
         const data = res.data;
         setSignUpDetails(data);
         sessionStorage.setItem('signUpDetails', JSON.stringify(data));
+      }).catch(error => {
+        // console.error(error);
       });
   }
 }
  
-  const signUpRows = signUpDetails.map((details) => (
-    <tr key={details.id}>
-      {details.email}
-    </tr>
-  ));
-  const signUpRowsAsString = signUpRows.map(row => row.props.children);
-   const emailData = signUpRowsAsString.join(', ');
+const signUpRows = signUpDetails.map((details) => (
+  <tr key={details.id}>
+    {details.email}
+  </tr>
+));
+const signUpRows1 = signUpDetails.map((details) => (
+  <tr key={details.id}>
+    {details.mobileno}
+  </tr>
+));
+const signUpRowsAsString = signUpRows.map(row => row.props.children);
+ const emailData = signUpRowsAsString.join(', ');
+ const signUpRowsAsString1 = signUpRows1.map(row => row.props.children);
+ const MobileNumber = signUpRowsAsString1.join(', ');
 // console.log(emailData);
 
 useEffect(() => {
@@ -366,13 +379,13 @@ useEffect(() => {
       console.log(data);
   if(data.currentaddress === "yes" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo) && regexStreet.test(data.propertystreetNo) && data.mobno!== ("" || undefined))
   {
-     navigate("/payment",{state:{marketValue,security,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData,userDetails : data}});
+     navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData,userDetails : data}});
       console.log("ji");
     
   }
   else {if(data.currentaddress === "no" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo)  && regexStreet.test(data.propertystreetNo) && integerRege6.test(data.pincode) && regexHouseNo.test(data.houseno) && regexStreet.test(data.streetno) && data.mobno!== ("" || undefined)){
    console.log(data);
-    navigate("/payment",{state:{marketValue,security,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData , userDetails : data}});    
+    navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData , userDetails : data}});    
   }}
   // Save form data to session storage
   sessionStorage.setItem('formData', JSON.stringify(data));
@@ -394,9 +407,10 @@ useEffect(() => {
   }
 
  
+data.mobno=formData?.mobileno || mobileno || MobileNumber;
+data.email=formData?.email || emailId || emailData;
 
-
-
+console.log(data);
   return (
     <div className="container-fluid fillOutPage">
       <Header/>
@@ -453,7 +467,7 @@ useEffect(() => {
                     required
                     value={data.fullname.toUpperCase()}
                     onChange={handleChange}
-                    inputProps={{ maxLength: 30 }}
+                    inputProps={{ maxLength: 50 }}
                     onKeyPress={(e) => {
                       // Prevent input if the key pressed is not a number
                       const onlyNumbers = /[a-zA-Z]/;
@@ -482,7 +496,7 @@ useEffect(() => {
                     {validationErrors.pancard && <span className="text-danger">{validationErrors.pancard}</span>}
 
                     </div>
-                    <div className=' col-12 col-lg-6 mb-2'>
+                    <div className=' col-12 col-lg-7 mb-2'>
                     <label className="control-label w-50 mt-2" ><span className='fw-semibold text-secondary FillDOB'>Date of Birth</span>
                     <input type='date' name='dob'  min="1924-01-01" max={minDateFormatted}  value={data.dob} required className=' FillDOBInput p-1 rounded ms-1' onChange={handleChange} />  </label><br/>
                     {validationErrors.dob && <span className="text-danger">{validationErrors.dob}</span>}
@@ -495,7 +509,7 @@ useEffect(() => {
                     id="outlined-disabled-input"
                     label="Email-Id"
                     onChange={handleChange}
-                    defaultValue={formData?.email || emailData}
+                    defaultValue={formData?.email || emailId || emailData}
                     InputProps={{
                       disabled: true,
                       className:'fw-bold'
@@ -506,7 +520,7 @@ useEffect(() => {
                     id="outlined-disabled-input"
                     label="Mobile No"
                     onChange={handleChange}
-                    defaultValue={formData?.mobileno || ''}
+                    defaultValue={formData?.mobileno || mobileno || MobileNumber}
                     InputProps={{
                       disabled: true,
                       className:'fw-bold',

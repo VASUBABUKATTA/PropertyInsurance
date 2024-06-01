@@ -1,31 +1,46 @@
 import React, { useState, useEffect } from 'react';
 // import './Profile.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PropertyInsuranceService from './Service/PropertyInsuranceService';
 import { integerRege6, regexEmail, regexFullName, regexHouseNo,  regexMobileNo, regexStreet,  regexUsername } from './RegularExpressions';
 import { FormLabel, TextField } from '@mui/material';
 import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
 import PreventBacKNavigation from './PreventBackNavigation';
+import p3 from '../Components/images/p3.jpeg';
+import '../App.css';
+import PhoneIcon from '@mui/icons-material/Phone';
+import Button from '@mui/material/Button';
+import { ClickAwayListener, Tooltip } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 
 function Profile() {
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
 
+      const [open, setOpen] = React.useState(false);
+      const handleTooltipClose = () => {
+        setOpen(false);
+      };
+    
+      const handleTooltipOpen = () => {
+        setOpen(true);
+      };
 
-      useEffect(() => {
-        // e.preventDefault();
-        window.scrollTo(0, 0);
-        // Prevent going back
-        const preventNavigation = () => {
-          window.history.pushState(null, null, "/Profile");
-        };
-        window.history.pushState(null, null, "/Profile");
-        window.addEventListener("popstate", preventNavigation);
-        return () => {
-          window.removeEventListener("popstate", preventNavigation);
-        };
-      }, []);
+    //   useEffect(() => {
+    //     // e.preventDefault();
+    //     window.scrollTo(0, 0);
+    //     // Prevent going back
+    //     const preventNavigation = () => {
+    //       window.history.pushState(null, null, "/Profile");
+    //     };
+    //     window.history.pushState(null, null, "/Profile");
+    //     window.addEventListener("popstate", preventNavigation);
+    //     return () => {
+    //       window.removeEventListener("popstate", preventNavigation);
+    //     };
+    //   }, []);
 
     const location = useLocation();
     const { state } = location;
@@ -128,31 +143,66 @@ function Profile() {
                 break;
         }
     };
-
-    useEffect(() => {     
-        PropertyInsuranceService.getCustomerIdByMobileNo(storedMobileNumber)
-            .then((res) => {
+    
+    useEffect(() => {
+        const fetchCustomerData = async () => {
+            try {
+                const res = await PropertyInsuranceService.getCustomerIdByMobileNo(storedMobileNumber);
                 setSignUpDetails(res.data);
                 const customerId = res.data[0]?.customerId;
                 if (customerId) {
-                    PropertyInsuranceService.getStructureDetailsByCustomerId(customerId)
-                        .then((res) => {
-                            setStructureDetails(res.data);
-                        });
-                    PropertyInsuranceService.getFillDetailsByCustomerId(customerId)
-                        .then((res) => {
-                            setFilldetails(res.data);
-                        });
-                    PropertyInsuranceService.getPaymentDetailsByCustomerId(customerId)
-                        .then((res) => {
-                            setPaymentDetails(res.data);
-                        })
-                        .catch((error) => {
-                            console.error();
-                        });
+                    try {
+                        const structureRes = await PropertyInsuranceService.getStructureDetailsByCustomerId(customerId);
+                        setStructureDetails(structureRes.data);
+                    } catch (error) {
+                        console.error('Error fetching structure details:', error);
+                    }
+                    try {
+                        const fillRes = await PropertyInsuranceService.getFillDetailsByCustomerId(customerId);
+                        setFilldetails(fillRes.data);
+                    } catch (error) {
+                        console.error('Error fetching fill details:', error);
+                    }
+                    try {
+                        const paymentRes = await PropertyInsuranceService.getPaymentDetailsByCustomerId(customerId);
+                        setPaymentDetails(paymentRes.data);
+                    } catch (error) {
+                        console.error('Error fetching payment details:', error);
+                    }
                 }
-            });
-        }, []); 
+            } catch (error) {
+                console.error('Error fetching customer ID:', error);
+            }
+        };
+
+        fetchCustomerData();
+    }, [storedMobileNumber]);
+
+    // useEffect(() => {     
+        
+    //     PropertyInsuranceService.getCustomerIdByMobileNo(storedMobileNumber)
+    //         .then((res) => {
+    //             setSignUpDetails(res.data);
+    //             const customerId = res.data[0]?.customerId;
+    //             if (customerId) {
+    //                 PropertyInsuranceService.getStructureDetailsByCustomerId(customerId)
+    //                     .then((res) => {
+    //                         setStructureDetails(res.data);
+    //                     });
+    //                 PropertyInsuranceService.getFillDetailsByCustomerId(customerId)
+    //                     .then((res) => {
+    //                         setFilldetails(res.data);
+    //                     });
+    //                 PropertyInsuranceService.getPaymentDetailsByCustomerId(customerId)
+    //                     .then((res) => {
+    //                         setPaymentDetails(res.data);
+    //                     })
+    //                     .catch((error) => {
+    //                         console.error();
+    //                     });
+    //             }
+    //         });
+    //     }, []); 
 
     const handleShowForm = (e) => {
         e.preventDefault();
@@ -161,11 +211,12 @@ function Profile() {
     };
 
     useEffect(() => {
-        setContact({
+        try {
+            setContact({
             ...contact,
             email: signUpDetails[0]?.email,
             mobileno: signUpDetails[0]?.mobileno,
-            name: fillDetails[0]?.fullname,
+            name: signUpDetails[0]?.name,
         });
         setAddress({
             ...address,
@@ -175,6 +226,10 @@ function Profile() {
             city:fillDetails[0]?.city,
             state:fillDetails[0]?.state
         });
+        } catch (error) {
+            console.log('error occured',error);
+        }
+        
     }, [signUpDetails,fillDetails]);
 
     const handleEditAddress = (e) => {
@@ -405,18 +460,69 @@ console.log(signUpDetails,contact.mobileno)
         }
     };
 
+    // const handleCancel=()=>
+    // {
+    //     setOtpSent1(false);
+    //     setOtpSent(false);
+    //     setIsEditingMobile(false);
+    //     setIsEditingEmail(false);
+    //     contact.mobileno=signUpDetails[0].mobileno;
+    //     contact.email=signUpDetails[0].email;
+    //     setValidationErrors("");
+    //     setData("");
+    //     setNotVerified("");
+    // }
+
     const handleCancel=()=>
-    {
-        setOtpSent1(false);
-        setOtpSent(false);
-        setIsEditingMobile(false);
-        setIsEditingEmail(false);
-        contact.mobileno=signUpDetails[0].mobileno;
-        contact.email=signUpDetails[0].email;
-        setValidationErrors("");
-        setData("");
-        setNotVerified("");
-    }
+        {
+            setOtpSent1(false);
+            setOtpSent(false);
+            setIsEditingMobile(false);
+            // setIsEditingEmail(false);
+            contact.mobileno=signUpDetails[0].mobileno;
+            contact.email=signUpDetails[0].email;
+            setValidationErrors("");
+            setData("");
+            setNotVerified("");
+        }
+        const handleCancel1=()=>
+        {
+            setOtpSent1(false);
+            setOtpSent(false);
+            // setIsEditingMobile(false);
+            setIsEditingEmail(false);
+            contact.mobileno=signUpDetails[0].mobileno;
+            contact.email=signUpDetails[0].email;
+            setValidationErrors("");
+            setData("");
+            setNotVerified("");
+        }
+        const handleCancel2=()=>
+        {
+            // setOtpSent1(false);
+            // setOtpSent(false);
+            // setIsEditingMobile(false);
+            // setIsEditingEmail(false);
+            setIsEditingAddress(false);
+            address.houseno = fillDetails[0].houseno;
+            address.streetno = fillDetails[0].streetno;
+            address.city = fillDetails[0].city;
+            address.state = fillDetails[0].state;
+            address.pincode = fillDetails[0].pincode;
+            // contact.mobileno=signUpDetails[0].mobileno;
+            // contact.email=signUpDetails[0].email;
+            setValidationErrors("");
+            // setData("");
+            setNotVerified("");
+        }
+
+        let navigate = useNavigate();
+
+        const HandleNewPolicy=()=>{
+            var i = 1;
+            var emailId = signUpDetails[0].email;
+            navigate('/property',{state:{i,mobileno,emailId}})
+        }
 
     console.log(address)
     console.log(signUpDetails,StrucutureDetails,fillDetails,paymentDetails)
@@ -454,87 +560,153 @@ console.log(signUpDetails,contact.mobileno)
     const interartingCustomerDetails = () => {
         return (
             <div>
-                {[...Array(fillDetails.length)].map((_, index) => (
+            {fillDetails.length === 0 ? (
+                <>
+                <h3 className="text-center fw-bold text-secondary mt-4"><button onClick={HandleNewPolicy} className='btn btn-link fw-bold fs-4'>Buy any policy</button></h3>
+                </>
+            ) : (
+                fillDetails.map((_, index) => (
                     <div key={index}>
                         <div className="card shadow mt-3 fillOutPage">
                             <div className="card-header pcdetails d-flex justify-content-between flex-wrap">
-                                <h4 className="text-start fw-bold text-secondary">RamanaSecure Living Insurance --- {index+1}</h4>
+                                <h4 className="text-start fw-bold text-secondary">
+                                    Property Insurance : {index + 1}
+                                </h4>
                                 <h5 className="text-end mt-2 mt-md-0">
-                                    <span className="fw-bold text-secondary">ID :</span>
+                                    {/* <span className="fw-bold text-secondary"> Policy ID :</span> */}
+                                    <span className="fw-bold text-secondary">Customer ID :</span>
                                     {paymentDetails[index]?.customerId}
                                 </h5>
                             </div>
                             <div className="card-body">
                                 <div className="row pcdetails">
-                                    <div className="col-md-6">
+                                    <div className="col-md-6" style={{borderRight:'solid 2px #dcdcdc'}}>
                                         <p className="card-text fw-bold">
-                                            Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span className="fw-bold text-secondary">
-                                                {fillDetails[index]?.fullname}
+                                            Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp; {fillDetails[index]?.fullname}
                                             </span>
                                         </p>
-                                        {/* <p className="card-text fw-bold">
+                                        {/* 
+                                        <p className="card-text fw-bold">
                                             Email &nbsp;&nbsp;&nbsp;: <span className="fw-bold text-secondary">
                                                 {signUpDetails[0]?.email}
                                             </span>
                                         </p>
                                         <p className="card-text fw-bold">
                                             Mobile&nbsp; :<span className="fw-bold text-secondary"> {mobileno}</span>
-                                        </p> */}
-                            
+                                        </p> 
+                                        */}
                                         <p className="card-text fw-bold">
-                                            Property Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span className="fw-bold text-secondary"> {StrucutureDetails[index]?.marketValue}</span>
-                                        </p>
-                                
-                                        <p className="card-text fw-bold">
-                                            squareFeet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;: <span className="fw-bold text-secondary">
-                                                {StrucutureDetails[index]?.squareFeet}
+                                            Property Value &nbsp;&nbsp;&nbsp; : 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp;{StrucutureDetails[index]?.marketValue}
                                             </span>
                                         </p>
                                         <p className="card-text fw-bold">
-                                            Age of the building : <span className="fw-bold text-secondary">
-                                                {StrucutureDetails[index]?.buildingAge}
+                                            Square Feet &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp;{StrucutureDetails[index]?.squareFeet}
                                             </span>
                                         </p>
-            
+                                        <div className='d-flex'>
+                                        <p className="card-text fw-bold col-4">
+                                    Address &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: </p>
+                                    <span className="fw-bold text-secondary col-8">
+                                    &nbsp;{fillDetails[index]?.propertyhouseNo} ,&nbsp;
+                                        {fillDetails[index]?.propertystreetNo} ,&nbsp;
+                                        {fillDetails[index]?.propertycity} , &nbsp;
+                                        {fillDetails[index]?.propertystate} ,&nbsp;
+                                        {fillDetails[index]?.propertypincode}
+                                    
+                                    </span>
+                                    </div>
                                     </div>
                                     <div className="col-md-6 mt-3 mt-md-0">
-                                        {/* <p className="card-text fw-bold">
+                                        {/* 
+                                        <p className="card-text fw-bold">
                                             Age of the building : <span className="fw-bold text-secondary">
                                                 {StrucutureDetails[index]?.buildingAge}
                                             </span>
-                                        </p> */}
+                                        </p> 
+                                        */}
                                         <p className="card-text fw-bold">
-                                            Premium Amount &nbsp; &nbsp;&nbsp;: <span className="fw-bold text-secondary"> ₹{paymentDetails[index]?.premium} /-</span>
+                                            Premium Amount &nbsp; &nbsp;&nbsp;: 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp;₹ {paymentDetails[index]?.premium} /-
+                                            </span>
                                         </p>
-                                        {/* <p className="card-text fw-bold">
-                                            Property Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span className="fw-bold text-secondary"> {StrucutureDetails[index]?.marketValue}</span>
-                                        </p> */}
+                                        {/* 
                                         <p className="card-text fw-bold">
-                                            No. Of Years &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : <span className="fw-bold text-secondary"> {paymentDetails[index]?.year}&nbsp;Years</span>
+                                            Property Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+                                            <span className="fw-bold text-secondary"> 
+                                                {StrucutureDetails[index]?.marketValue}
+                                            </span>
+                                        </p> 
+                                        */}
+                                        <p className="card-text fw-bold">
+                                            No. of Years &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp;{paymentDetails[index]?.year}&nbsp;Years
+                                            </span>
                                         </p>
                                         <p className="card-text fw-bold">
-                                            Address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span className="fw-bold text-secondary">
-                                                {fillDetails[index]?.propertyhouseNo}&nbsp;,&nbsp;
-                                                {fillDetails[index]?.propertystreetNo}&nbsp;,&nbsp;
-                                                {fillDetails[index]?.propertypincode}&nbsp;,&nbsp;
-                                                {fillDetails[index]?.propertycity}&nbsp;,&nbsp;
-                                                {fillDetails[index]?.propertystate}
+                                            Age of the building &nbsp; : 
+                                            <span className="fw-bold text-secondary">
+                                            &nbsp;{StrucutureDetails[index]?.buildingAge}
                                             </span>
                                         </p>
                                     </div>
+                                    <div className='d-flex justify-content-end'>
+                                    <a className='btn btn-success' href={`http://192.168.1.2:9092/api/v1/create/${paymentDetails[index]?.paymentId}`} download='invoice' target='_blank'><i className="fa-solid fa-download me-2"></i>Invoice
+                                    </a>
                                 </div>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
-                ))}
+                ))
+            )}
+            <div className='d-flex justify-content-end mt-lg-4'>
+                <button className='mx-5 btn btn-link fs-5' onClick={HandleNewPolicy}> Get new policy</button>
             </div>
+        </div>
         );
     };
 
     return (
         <div>
-            <PreventBacKNavigation/>
+            {/* <PreventBacKNavigation/> */}
         <div className='row container-fluid pay'>
+        <div className='text-center mb-5' >
+                <header >
+      <div class="d-flex justify-content-between align-items-center  py-2 rounded fixed" style={{background:'#f0f8ff'}} >
+				<div className="" >
+        <img class="mx-3 ramana" src={p3} alt="my pic" title='RamanaSoft Insurance' style={{borderRadius:'10px'}}></img>
+				</div> 
+				<div className="ms-auto me-3 ">
+          <ClickAwayListener onClickAway={handleTooltipClose}>
+            <div className=''>
+              <Tooltip
+                PopperProps={{
+                  disablePortal: true,
+                }}
+                onClose={handleTooltipClose}
+                open={open}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                title="1800-143-123"
+              >
+                <Button onClick={handleTooltipOpen} className='text-center me-lg-4 text-nowrap'><PhoneIcon />&nbsp;Call Us </Button>
+              </Tooltip>
+            </div>
+          </ClickAwayListener>
+				</div> 
+			</div>
+                </header>
+            </div>
             <div className='col-12 col-lg-3 col-md-4 mt-3 rounded line' style={{borderRight:'3px solid grey'}}>
                 <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Profile <AccountCircleSharpIcon className='fs-1'/></h2>
                 <div className='overflow-y-scroll' style={{height:'86vh'}}>
@@ -556,8 +728,9 @@ console.log(signUpDetails,contact.mobileno)
                                     id="outlined-disabled-input"
                                     // label="Name "
                                     name='name'
-                                    value={fillDetails[0]?.fullname}
-                                    defaultValue={fillDetails[0]?.fullname}
+                                    // value={fillDetails[0]?.fullname}
+                                    value={contact.name}
+                                    // defaultValue={fillDetails[0]?.fullname}
                                     InputProps={{
                                     disabled:true,
                                     className:'fw-bold text-secondary',
@@ -660,7 +833,7 @@ console.log(signUpDetails,contact.mobileno)
                             {isEditingEmail ? (
                                 <>
                                     <Link onClick={handleSendOTP1} className='me-4 text-decoration-none text-success'>SendOTP</Link>
-                                    <Link onClick={handleCancel} className='text-decoration-none text-danger'>Cancel</Link>
+                                    <Link onClick={handleCancel1} className='text-decoration-none text-danger'>Cancel</Link>
                                 </>
                                 ) : (
                                     <Link onClick={handleEditEmail}className=" text-decoration-none">Update <i className="fas fa-pencil-alt text-primary"></i></Link>
@@ -673,6 +846,10 @@ console.log(signUpDetails,contact.mobileno)
                             {renderOTPFieldOrButton1()}
                         </div>
                     </div> 
+                    {fillDetails.length === 0 ? (
+                        ""
+                    ) : (
+                        <>
                     <h4 className='text-secondary'>Address Details</h4>
                     <div className='ms-lg-2'>
                     <div>
@@ -844,18 +1021,21 @@ console.log(signUpDetails,contact.mobileno)
                     </div>
                     <div className="text-center my-2">
                             {isEditingAddress ? (
-                                <Link onClick={handleSaveAddress} className='text-decoration-none text-success'>Save</Link>
+                                <>
+                                    <Link onClick={handleSaveAddress} className='text-decoration-none text-success me-4'>Save</Link>
+                                    <Link onClick={handleCancel2} className='text-decoration-none text-danger'>Cancel</Link>
+                                </>
                             ) : (
                                 <Link onClick={handleEditAddress} className='text-decoration-none'>Update<i className="fas fa-pencil-alt text-primary ms-1"></i></Link>
                             )}
                         </div>
-                    </div>
+                    </div></>) }
                 </div>
             </div>
             <div className='col-12 col-lg-9 col-md-8 mt-3'>
-                <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Policy Details<span><Link to='/'><button className='btn btn-danger float-end me-2 fw-bold py-1 mt-1'>Log Out</button></Link></span></h2>
+                <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Policy Details<span><Link to='/'><button className='btn btn-danger float-end fw-bold'>Log Out  <LogoutIcon className='fs-5'/> </button></Link></span></h2>
                 <div className='ms-2'>
-                    <h4 className='text-secondary'>Customer Details</h4>
+                    {/* <h4 className='text-secondary'>Customer Details</h4> */}
                     {/* new table */}
                     
                     {

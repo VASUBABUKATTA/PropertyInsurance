@@ -213,7 +213,7 @@ function Login() {
         <div style={{position:'fixed',width:'100%'}}><Header/></div>
         
         <div className='row mt-5 mt-lg-3'>
-          <div className='col-12 col-lg-7 mt-2 lcdiv'style={{height:'63vh'}}>
+          <div className='col-12 col-lg-7 mt-2 lcdiv'style={{height:'65vh'}}>
             <div className='mt-4 pt-3 ms-4'>
               <h4 className='text-secondary branddesc mt-2'><span className=''style={{textDecoration:'underline',textDecorationColor:'brown'}}>Choose</span> Confidence: Choose Ramanasoft Insurance.</h4>
               <h3 className='fw-bold'>Life is unpredictable,<h3 className='fw-bold'>insurance makes it manageable.</h3></h3>
@@ -348,7 +348,7 @@ function Login() {
                     </div>
                     <div className='col-8 col-lg-9 lbmail'>
                       <p className='text-secondary fw-bold'>For General Enquires</p>
-                      <h4 className='fw-bold'>Ramanasoftpvtltd@gmail.com</h4>
+                      <h4 className='fw-bold'>support@ramanasoft.com</h4>
                     </div>
                   </div>
                   <div className='row w-100 border mt-5 p-2 rounded shadow'>
