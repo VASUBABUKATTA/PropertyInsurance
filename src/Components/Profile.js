@@ -658,7 +658,7 @@ console.log(signUpDetails,contact.mobileno)
                                         </p>
                                     </div>
                                     <div className='d-flex justify-content-end'>
-                                    <a className='btn btn-success' href={`http://192.168.1.2:9092/api/v1/create/${paymentDetails[index]?.paymentId}`} download='invoice' target='_blank'><i className="fa-solid fa-download me-2"></i>Invoice
+                                    <a className='btn btn-success' href={`http://122.169.207.194:9092/api/v1/create/${paymentDetails[index]?.paymentId}`} download='invoice' target='_blank'><i className="fa-solid fa-download me-2"></i>Invoice
                                     </a>
                                 </div>
                                 </div>
@@ -668,9 +668,7 @@ console.log(signUpDetails,contact.mobileno)
                     </div>
                 ))
             )}
-            <div className='d-flex justify-content-end mt-lg-4'>
-                <button className='mx-5 btn btn-link fs-5' onClick={HandleNewPolicy}> Get new policy</button>
-            </div>
+            
         </div>
         );
     };
@@ -679,37 +677,45 @@ console.log(signUpDetails,contact.mobileno)
         <div>
             {/* <PreventBacKNavigation/> */}
         <div className='row container-fluid pay'>
-        <div className='text-center mb-5' >
+        <div className='mb-5' >
                 <header >
-      <div class="d-flex justify-content-between align-items-center  py-2 rounded fixed" style={{background:'#f0f8ff'}} >
-				<div className="" >
-        <img class="mx-3 ramana" src={p3} alt="my pic" title='RamanaSoft Insurance' style={{borderRadius:'10px'}}></img>
-				</div> 
-				<div className="ms-auto me-3 ">
-          <ClickAwayListener onClickAway={handleTooltipClose}>
-            <div className=''>
-              <Tooltip
-                PopperProps={{
-                  disablePortal: true,
-                }}
-                onClose={handleTooltipClose}
-                open={open}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                title="1800-143-123"
-              >
-                <Button onClick={handleTooltipOpen} className='text-center me-lg-4 text-nowrap'><PhoneIcon />&nbsp;Call Us </Button>
-              </Tooltip>
-            </div>
-          </ClickAwayListener>
-				</div> 
-			</div>
+                    <div class="d-flex row py-2 rounded fixed justify-content-center align-items-center" style={{background:'#f0f8ff'}} >
+				        <div className="col-7" >
+                            <img class="mx-3 ramana" src={p3} alt="my pic" title='RamanaSoft Insurance' style={{borderRadius:'10px'}}></img>
+				        </div>
+                        <div className='col-5 d-flex'>
+                        <div>
+                        <button className='mx-5 btn btn-link fw-semibold text-decoration-none pnewpolicy' onClick={HandleNewPolicy}>  Get new policy</button>
+                        </div>
+				        <div className="mt-1">
+                            <ClickAwayListener onClickAway={handleTooltipClose}>
+                                <div className=''>
+                                    <Tooltip
+                                        PopperProps={{
+                                        disablePortal: true,
+                                        }}
+                                        onClose={handleTooltipClose}
+                                        open={open}
+                                        disableFocusListener
+                                        disableHoverListener
+                                        disableTouchListener
+                                        title="1800-143-123"
+                                    >
+                                        <Button onClick={handleTooltipOpen} className='text-center me-lg-4 text-nowrap'><PhoneIcon />&nbsp;Call Us </Button>
+                                    </Tooltip>
+                                </div>
+                            </ClickAwayListener>
+				        </div> 
+                        <div>
+                        <Link to='/'><button className='btn btn-danger float-end ms-4 fw-bold py-1 mt-1'>Log Out <LogoutIcon className='fs-5'/> </button></Link>
+                        </div>
+                        </div>
+			        </div>
                 </header>
             </div>
             <div className='col-12 col-lg-3 col-md-4 mt-3 rounded line' style={{borderRight:'3px solid grey'}}>
                 <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Profile <AccountCircleSharpIcon className='fs-1'/></h2>
-                <div className='overflow-y-scroll' style={{height:'86vh'}}>
+                <div className='overflow-y-scroll' style={{height:'80vh'}}>
                     <h4 className='text-secondary'>Contact Details</h4>
                     <div className='ms-lg-2'>
                         {/* <span className='fw-semibold'>Name:</span> */}
@@ -1033,8 +1039,8 @@ console.log(signUpDetails,contact.mobileno)
                 </div>
             </div>
             <div className='col-12 col-lg-9 col-md-8 mt-3'>
-                <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Policy Details<span><Link to='/'><button className='btn btn-danger float-end fw-bold'>Log Out  <LogoutIcon className='fs-5'/> </button></Link></span></h2>
-                <div className='ms-2'>
+                <h2 className='text-light fw-bold text-center rounded' style={{background:'#318ce7'}}>Policy Details</h2>
+                <div className='ms-2 overflow-y-scroll pe-lg-2' style={{height:'80vh'}}>
                     {/* <h4 className='text-secondary'>Customer Details</h4> */}
                     {/* new table */}
                     

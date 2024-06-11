@@ -431,12 +431,12 @@ console.log(data);
           <p className='my-3'><span className='fw-semibold'>Security : </span><span className='fw-bold text-dark'>{security}</span></p>
          
         </div>
-        <h3 className='mx-2 my-1 mt-3 rounded text-light px-2' style={{background:'#318ce7'}}>Premium Details<i className="fa-solid fa-sack-dollar fa-sm ms-2"></i> </h3>
+        <h3 className='mx-2 my-1 mt-3 rounded text-light px-2' style={{background:'#318ce7'}}>Premium Details<i className="fa-solid fa-indian-rupee fa-sm ms-2"></i> </h3>
         <div className='ms-3 mt-3 text-secondary ps-2'>
 
           <p className='my-3'><span className='fw-semibold'>No. Of Years : </span><span className='fw-bold text-dark'>{premiumData?.year} Years</span></p>
 
-          <p className='my-3 mb-3'><span className='fw-semibold'>Premium Amount : </span><span className='fw-bold text-dark'>{premiumData?.Premium}</span></p>
+          <p className='my-3 mb-3'><span className='fw-semibold'>Premium Amount : </span><span className='fw-bold text-dark'> ₹ {premiumData?.premium} /-</span></p>
 
         </div>
         <div className='mt-2 mb-3 text-center'>
@@ -469,12 +469,23 @@ console.log(data);
                     onChange={handleChange}
                     inputProps={{ maxLength: 50 }}
                     onKeyPress={(e) => {
-                      // Prevent input if the key pressed is not a number
-                      const onlyNumbers = /[a-zA-Z]/;
-                      if (!onlyNumbers.test(e.key)) {
-                        e.preventDefault();
-                      }
+                      const char = e.key;
+                      const currentValue = e.target.value;
+                      
+                      // Allow letters
+                      if (/[A-Za-z]/.test(char)) {
+                        return;
+                      }
+                      
+                      // Allow space if not the first character and not a consecutive space
+                      if (char === ' ' && currentValue && currentValue[currentValue.length - 1] !== ' ') {
+                        return;
+                      }
+                      
+                      // Prevent all other characters
+                      e.preventDefault();
                     }}
+                    
                     /><br/>
                     {validationErrors.fullname && <span className="text-danger">{validationErrors.fullname}</span>}
 

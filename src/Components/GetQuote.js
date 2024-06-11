@@ -1002,7 +1002,7 @@ const CaliculatePremium =()=>
               </div>
               <div className='col-7 ms-4 col-lg-4 mb-4 mt-5 mt-lg-0 pt-lg-0 pt-3'>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" className='fw-bold'>Select Years</InputLabel>
+                  <InputLabel id="demo-simple-select-label" className='fw-bold'><i className='fa-solid fa-arrow-right fa-bounce fs-4 fa-lg ms-4 me-4 text-primary'></i>Select Years</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"

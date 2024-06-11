@@ -33,6 +33,11 @@ height: 100vh;
   top: 12rem;
 
 }
+.pnewpolicy:hover{
+  text-decoration:underline !important;
+   color: black !important;
+  background-color: rgb(219, 238, 243) !important;
+}
 
 .cursor-no-drop:hover {
   cursor: no-drop;

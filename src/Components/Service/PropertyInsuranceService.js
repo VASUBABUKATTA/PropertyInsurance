@@ -1,83 +1,83 @@
 import axios from 'axios';
 // import Header from '../Header';
-const url ="http://192.168.1.2:9092/api/v1";
+const url ="http://122.169.207.194:9092/api/v1";
 
 class PropertyInsuranceService {
 
     static createDetails(values) {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/putStructure";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/putStructure";
         return axios.post(INSURANCE_API_BASE_URL, values);
     }
 
      static getAllDetails(){
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getStructure";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getStructure";
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static getStructureDetailsByCustomerId(customerid)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getStructureByCustomerId/"+customerid;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getStructureByCustomerId/"+customerid;
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static createCustomer(feilds){
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/putCustomer";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/putCustomer";
         return axios.post(INSURANCE_API_BASE_URL, feilds);
     }
 
     static getCustomer(){
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getCustomer";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getCustomer";
         return axios.get(INSURANCE_API_BASE_URL);
     }
     static getCustomerIdByMobileNo(mobileno){
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getCustomerByMobileNumber/"+mobileno;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getCustomerByMobileNumber/"+mobileno;
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static createfillDetails(data)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/putData";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/putData";
         return axios.post(INSURANCE_API_BASE_URL, data);
     }
 
     static getfillDetails()
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getData";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getData";
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static getFillDetailsByCustomerId(customerid){
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getfillDetailsByCustomerId/"+customerid;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getfillDetailsByCustomerId/"+customerid;
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static createPaymentData(details)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/putPaymentData";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/putPaymentData";
         return axios.post(INSURANCE_API_BASE_URL, details);
     }
 
     static getPaymentData()
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getPaymentData";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getPaymentData";
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static getPaymentDetailsByCustomerId(customerid)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/getPaymentDetailsByCustomerId/"+customerid;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/getPaymentDetailsByCustomerId/"+customerid;
         return axios.get(INSURANCE_API_BASE_URL);
     }
 
     static login(feilds)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/login";
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/login";
         return axios.post(INSURANCE_API_BASE_URL,feilds);
     }
     static checkMobileNumber(s)
     {
         // const a={s,d}
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/checkMobileNumber/"+s;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/checkMobileNumber/"+s;
         return axios.get(INSURANCE_API_BASE_URL);
                 
     }
@@ -85,13 +85,13 @@ class PropertyInsuranceService {
     static checkEmail(emailId)
     {
         // const a={s,d}
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/checkEmail/"+emailId;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/checkEmail/"+emailId;
         return axios.get(INSURANCE_API_BASE_URL);
                 
     }
     static sendEmailOtp(emailId)
     {
-        const INSURANCE_API_BASE_URL = "http://192.168.1.2:9092/api/v1/send/"+emailId;
+        const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/send/"+emailId;
         return axios.post(INSURANCE_API_BASE_URL);
     }
     static getOtp1()
@@ -108,31 +108,31 @@ class PropertyInsuranceService {
     }
 
     static updateCustomerByMobileNo (id, mobileno) {
-        const INSURANCE_API_BASE_URL =`http://192.168.1.2:9092/api/v1/updateCustomerByMobileNo/${id}/${mobileno}`;
+        const INSURANCE_API_BASE_URL =`http://122.169.207.194:9092/api/v1/updateCustomerByMobileNo/${id}/${mobileno}`;
         return axios.put(INSURANCE_API_BASE_URL);
         }
     
         static updateCustomerByEmailId (id,emailId) 
         {
-            const INSURANCE_API_BASE_URL = `http://192.168.1.2:9092/api/v1/updateCustomerByEmailId/${id}/${emailId}`;
+            const INSURANCE_API_BASE_URL = `http://122.169.207.194:9092/api/v1/updateCustomerByEmailId/${id}/${emailId}`;
             return axios.put(INSURANCE_API_BASE_URL);
          }
          static sendEmailotp(emailId)
          {
-            const INSURANCE_API_BASE_URL = `http://192.168.1.2:9092/api/v1/sendEmailOTPforUpdation/${emailId}`;
+            const INSURANCE_API_BASE_URL = `http://122.169.207.194:9092/api/v1/sendEmailOTPforUpdation/${emailId}`;
             return axios.post(INSURANCE_API_BASE_URL);
          }
     
          static updateFillDetailById(id,address)
          {
-            const INSURANCE_API_BASE_URL = `http://192.168.1.2:9092/api/v1/updateFillDetails/${id}`;
+            const INSURANCE_API_BASE_URL = `http://122.169.207.194:9092/api/v1/updateFillDetails/${id}`;
             return axios.put(INSURANCE_API_BASE_URL,address);
          }
 
     static sendEmailatQuotepage(email,data)
      {
         // const data={marketValue,squareFeet,pincode,year,Premium}
-        const INSURANCE_API_BASE_URL = `http://192.168.1.2:9092/api/v1/emailQuotePageTabularFormate/${email}`;
+        const INSURANCE_API_BASE_URL = `http://122.169.207.194:9092/api/v1/emailQuotePageTabularFormate/${email}`;
         // return axios.post(INSURANCE_API_BASE_URL,data,{
         //     headers:{
         //         "Content-Type":"application/json"
@@ -144,7 +144,7 @@ class PropertyInsuranceService {
 
      static invoiceDowload(paymentId)
      {
-        const INSURANCE_API_BASE_URL=`http://192.168.1.2:9092/api/v1/create/${paymentId}`;
+        const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/v1/create/${paymentId}`;
         return axios.get(INSURANCE_API_BASE_URL);
      }
 

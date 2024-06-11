@@ -13,6 +13,7 @@ import ProtectedRoutes from './utils/ProtectedRoutes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorPage from './Components/ErrorPage';
+import PaymentSuccessPage from './Components/PaymentComponent/PaymentSuccess';
 
 const clientId = "246541673533-e90kj0pumgndrmt51j27v853d3pkon00.apps.googleusercontent.com";
 
@@ -47,6 +48,7 @@ function App() {
               <Route path="/fill" element={<FilldetailsPage/>}/>
               <Route path="/payment" element={<PaymentPage/>}/>
               <Route path="/profile" element={<Profile/>}/>
+              <Route path="/paymentsuccess" element={<PaymentSuccessPage/>}/>
             </Route>
           </Routes>
         </div>

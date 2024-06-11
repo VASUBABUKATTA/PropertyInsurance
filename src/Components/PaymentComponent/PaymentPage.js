@@ -53,7 +53,7 @@ function PaymentPage() {
  const Propertystate=state?.userDetails?.propertystate;
 // data from premium page:
   const year = premiumData?.year;
-  const premium = premiumData?.Premium;
+  const premium = premiumData?.premium;
   
   const fillDetailsAlluserRelated=state?.userDetails
   console.log(JSON.stringify(fillDetailsAlluserRelated));
@@ -157,12 +157,14 @@ const navigate=useNavigate("");
 
   //current date & term end date  for policy
   const currentDate = new Date();
+  const currentDateminus = new Date();
   const day = currentDate.getDate().toString().padStart(2, '0');
+  const day1 = (currentDateminus.getDate() - 1).toString().padStart(2, '0');
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Note: Month starts from 0
   const startyears = currentDate.getFullYear();
   const endyears = currentDate.getFullYear()+year;
   const formattedStartDate = `${day}/${month}/${startyears}`; 
-  const formattedEndDate = `${day}/${month}/${endyears}`; 
+  const formattedEndDate = `${day1}/${month}/${endyears}`; 
 
   const handleChange = (e) => {
 
@@ -193,7 +195,7 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
     image: p4,
     handler: function (response) 
     {
-        alert(response.razorpay_payment_id);
+        // alert(response.razorpay_payment_id);
 
         const pamentdata=response.razorpay_payment_id;
 
@@ -214,8 +216,8 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
       PropertyInsuranceService.createDetails(values)
 
       toast.success("Payment SuccessFully Completed Thank You");
-      navigate("/");
-      toast.info("Please Login to Continue...");
+      toast.info("Please Login to get invoice...");
+      navigate("/paymentsuccess");
 
       
     },
@@ -237,17 +239,18 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
 }
 
   return (
-    <div className='row pay px-1'>
+    <div className='pay container-fluid'>
       <Header/>
-      <div className='mt-5 px-3 mx-md-5 mx-lg-5 mt-lg-5 pt-4 w-75'>
+      <div className='mt-5 px-3 mx-md-5 mt-lg-5 pt-4'>
         <h4 className='fw-bold'>Checkout</h4>
         <p className='py-2'>Thank you <span className='fw-bold'>{name?name:'user'}</span>&nbsp;for choosing RamanaSoft Insurance for your home insurance needs.</p>
         <p className='fw-bold text-secondary'><ArrowBackIcon className='text-primary fs-2 border rounded shadow' onClick={handleGoBack} /> &nbsp; Back to fill Data Form</p>
       </div>
 
-      <div className='col-12 col-md-10 mx-md-5 col-lg-7  mx-2'>
-        <div className="card border-success px-2 shadow mb-3 mx-lg-5 property" style={{ maxWidth: '55rem' }}>
-          <div className="card-header bg-transparent border-success">Reference Number : <span className='fw-bold'>56445462321</span></div>
+      <div className='row'>
+      <div className='col-12 col-md-9 mx-md-5 col-lg-7'>
+        <div className="card border-success px-2 shadow mb-3 property" >
+          {/* <div className="card-header bg-transparent border-success">Reference Number : <span className='fw-bold'>56445462321</span></div> */}
           <div className="card-body py-1">
             <div className='d-flex flex-lg-row flex-column flex-md-row justify-content-around'>
               <div>
@@ -284,7 +287,7 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
             </div>
           </div>
           <div className="card-footer bg-transparent ">
-            <div className='p-2 text-center text-lg-start text-secondary'>
+            <div className='p-lg-2 text-center text-lg-start text-secondary'>
               <h6>Declaration : By clicking on proceed to payment I hereby declare that my house is a pucca (brick and cement) construction and I do not have any claim history.</h6>
             </div>
             <div className='row mt-2'>
@@ -294,7 +297,7 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
               </div>
               <div className='col-12 col-lg-6'>
                 <div>
-                  <button className='btn btn-primary mx-md-5 px-5 py-2 mx-lg-5 fw-bold buy mb-2 mx-2 text-nowrap' onClick={handleClick}>Proceed to Payment</button>
+                  <button className='btn btn-primary mx-3 py-2 fw-bold buy mb-2 text-nowrap' onClick={handleClick}>Proceed to Payment</button>
                   <div>
                     <small>By clicking "Proceed to Payment", I accept the above Declaration and that I've personally filled out the fill data form.</small>
                   </div>
@@ -305,12 +308,13 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
         </div>
       </div>
 
-      <div className='col-12 col-lg-4 d-flex'>
+      <div className='col-12 col-lg-3 col-md-5'>
         <div>
           <img src={safe} title="no data breeching" alt='secured data' className='w-100'></img>
         </div>
       </div>
-      <div className='px-5 me-lg-3'>
+      </div>
+      <div className='px-5 row'>
         <p className='text-center'>RamanaSoft Insurance Pvt.Ltd located at Aditya Trade center, Ameerpet. Hyderabad 500073.<br /> for more enquiries please contact <a href="mailto:ramanasoftpvtltd@gmail.com">ramanasoftpvtltd@gmail.com</a>.</p>
       </div>
       {/* {values.customerId} */}

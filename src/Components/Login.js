@@ -200,13 +200,13 @@ function Login() {
     {
           SetVerifyOtp("Verified Successfully");
           setshowOTPInput(false);
+          navigate('/profile',{state:{values:values.mobileno}})
     }
     else{SetVerifyOtp("Invalid OTP...!")}
   };
-  const HandleLogin=()=>
-    {
-      navigate('/profile',{state:{values:values.mobileno}})
-    }
+  // const HandleLogin=()=>
+  //   {
+  //   }
 
     return (
       <div className='container-fluid logbac'>
@@ -276,7 +276,7 @@ function Login() {
                           }}
                         />
                        ))}
-                       <button className='btn btn-info text-nowrap fw-bold shadow ms-1' onClick={handleVerifyMobileNoOtp}>Verify OTP</button><br/>
+                       <button className='btn btn-info text-nowrap fw-bold shadow ms-1' onClick={handleVerifyMobileNoOtp}>Login <LoginSharpIcon className='text-dark'/></button><br/>
                       </form>
                       {verifyotp ===  "Invalid OTP...!" && <h4 className='text-danger ms-2 mt-2'>{verifyotp}<i className="fa-solid fa-xmark ms-2"></i></h4>}
                      </div>
@@ -285,12 +285,12 @@ function Login() {
                  {verifyotp ===  "Verified Successfully" && <h4 className='text-success mt-lg-3 ms-2'>{verifyotp}<CheckCircleOutlineIcon/></h4>}
                 <div className='mt-lg-3 d-flex justify-content-center'>
                     {/* <button className='btn btn-link  text-decoration-none fw-bold' onClick={handleClick} >Create Account ? </button>                 */}
-                    {
+                    {/* {
                     verifyotp === "Verified Successfully" &&<button className='btn btn-primary fw-bold shadow' onClick={HandleLogin}>Login <LoginSharpIcon className='text-dark'/></button>
-                    }
-                    {
+                    } */}
+                    {/* {
                       verifyotp !== "Verified Successfully" &&<button className='btn btn-primary fw-bold shadow disabled'>Login <LoginSharpIcon className='text-dark'/> </button>
-                    }
+                    } */}
                  </div>
               </div>
               {/* <div>

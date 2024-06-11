@@ -4,7 +4,7 @@ export const regexpropertyValues = new RegExp(/^[1-9][0-9]{2,}$/);
 export const regexmarketValue = new RegExp( /^[1-9][0-9]{5,}$/);
 export const pincode=new RegExp(/^[1-9]{1}[0-9]{5}$/);
 
-export const regexUsername = new RegExp(/^[A-Za-z][A-Za-z. ]{1,30}[A-Za-z. ]$/);
+export const regexUsername = new RegExp(/^[A-Za-z][A-Za-z. ]{1,50}[A-Za-z. ]$/);
 export const regexPassword = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/);
 export const regexMobileNo = new RegExp(/^[6-9][0-9]{9}$/);
 // export const regexEmail =  new RegExp(/^(?!.*?\.\.)[^\s][^\s]*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,3})$/);
