@@ -484,13 +484,15 @@ public class PropertyInsuranceService
             JSONObject requestBody = new JSONObject();
             JSONObject from = new JSONObject();
             String email="support@qtnext.com";
+            from.put("name", "RS Insurance");
             from.put("address", email);
+
             requestBody.put("from", from);
 
             JSONObject to = new JSONObject();
             JSONObject emailAddress = new JSONObject();
             emailAddress.put("address", emailRequest);
-//            emailAddress.put("name", emailRequest.getToName());
+
             to.put("email_address", emailAddress);
             requestBody.put("to", new JSONObject[]{to});
 
@@ -578,6 +580,7 @@ public class PropertyInsuranceService
             JSONObject from = new JSONObject();
             String email="support@qtnext.com";
             from.put("address", email);
+            from.put("name", "RS Insurance");
             requestBody.put("from", from);
 
             JSONObject to = new JSONObject();
@@ -690,6 +693,7 @@ public class PropertyInsuranceService
 	            JSONObject from = new JSONObject();
 	            String email="support@qtnext.com";
 	            from.put("address", email);
+                from.put("name", "RS Insurance");
 	            requestBody.put("from", from);
 
 	            JSONObject to = new JSONObject();
@@ -704,7 +708,7 @@ public class PropertyInsuranceService
 	            String name="Sushmidhar";
 	            String role="Customer Support Executive";
 	            String ofcName="RS Insurance pvt ltd.";
-	            String phNo="1800-258-2465";
+	            String phNo="1800-143-123";
 	            String mail="rspropertyinsurance@gmail.com";
 	            String address1="Madhapur, Hyderabad,";
 	            String address2="Telangana, India. 500081";
@@ -804,6 +808,7 @@ public class PropertyInsuranceService
 	            JSONObject requestBody = new JSONObject();
 	            JSONObject from = new JSONObject();
 	            String email="support@qtnext.com";
+                from.put("name", "RS Insurance");
 	            from.put("address", email);
 	            requestBody.put("from", from);
 
@@ -906,6 +911,23 @@ public class PropertyInsuranceService
 	        
 
 		}
+
+
+        
+
+        public String checkEligibility1(FillDetails request) 
+        {
+            Optional<FillDetails> records =fillDetailsRepository.findByPropertyhouseNoAndPropertystreetNoAndPropertypincodeAndPropertystateAndPropertycity(request.getPropertyhouseNo(),
+                    request.getPropertystreetNo(), request.getPropertypincode(),request.getPropertystate(),request.getPropertycity());
+            
+             if (records.isPresent() ) {
+                 return "Records are present";
+             }
+             else
+             {
+              return "Records are empty";
+             }
+        }
 
 
 }

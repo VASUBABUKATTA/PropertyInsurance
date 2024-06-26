@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6f9b4310.css",
+    "main.js": "/static/js/main.1d4a3369.js",
+    "static/js/453.d4932990.chunk.js": "/static/js/453.d4932990.chunk.js",
+    "static/media/insurance.jpg": "/static/media/insurance.7eb1657f7f7dbdb524cc.jpg",
+    "static/media/error.jpg": "/static/media/error.291c471e5ac5782df46c.jpg",
+    "static/media/healthin.png": "/static/media/healthin.f2e86953dad64130f8a8.png",
+    "static/media/vehiclein.png": "/static/media/vehiclein.bfec2fa1b23a6f27ec0b.png",
+    "static/media/homein.png": "/static/media/homein.212fc6a8f630eb96d081.png",
+    "static/media/happy.jpg": "/static/media/happy.f44b103a3cf3ad07fbca.jpg",
+    "static/media/care.png": "/static/media/care.322a66fe4fa127a64d84.png",
+    "static/media/p1.jpg": "/static/media/p1.117c11649f85ef877b62.jpg",
+    "static/media/property.jpg": "/static/media/property.7af6cbd8c2f52b9c813e.jpg",
+    "static/media/safe.png": "/static/media/safe.28892fce4d5474e5c5ab.png",
+    "static/media/p7.jpg": "/static/media/p7.5826202b3fc41ac0655d.jpg",
+    "static/media/customerCare.jpg": "/static/media/customerCare.4894b199c0ef09f11176.jpg",
+    "static/media/p5.png": "/static/media/p5.acf000b102aa810d1f2e.png",
+    "static/media/p3.jpeg": "/static/media/p3.20be26e87f9950418ada.jpeg",
+    "static/media/shield.png": "/static/media/shield.bc7bac93fe9fb46f0ba8.png",
+    "index.html": "/index.html",
+    "main.6f9b4310.css.map": "/static/css/main.6f9b4310.css.map",
+    "main.1d4a3369.js.map": "/static/js/main.1d4a3369.js.map",
+    "453.d4932990.chunk.js.map": "/static/js/453.d4932990.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6f9b4310.css",
+    "static/js/main.1d4a3369.js"
+  ]
+}

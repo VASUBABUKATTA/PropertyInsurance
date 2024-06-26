@@ -1,6 +1,7 @@
 package com.insurance.www.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,10 @@ public interface FillDetailsRepository extends JpaRepository<FillDetails , Long 
 	List<FillDetails> findByCustomerId(String customerId);
 
 	List<FillDetails> findByPaymentId(String string);
+
+    Optional<FillDetails> findByPropertyhouseNoAndPropertystreetNoAndPropertypincodeAndPropertystateAndPropertycity(
+            String propertyhouseNo, String propertystreetNo, String propertypincode, String propertystate,
+            String propertycity);
 
 	
 	

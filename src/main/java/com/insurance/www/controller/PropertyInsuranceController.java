@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -619,7 +620,7 @@ public String EmailUpdation(@PathVariable String toEmail)
 	public void createPdf(HttpServletResponse response, @PathVariable String paymentId) {
 	        // Setting content type and response headers
 		response.setContentType("application/pdf");
-	    response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=document.pdf");
+	    response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=RS_PI_invoice.pdf");
 
 	     try {
 	            invoiceService.export(response, paymentId);
@@ -635,6 +636,28 @@ public String EmailUpdation(@PathVariable String toEmail)
 		return propertyInsuranceService.sendEmailQuotePageTabularFormate(toEmail, qdtf);
 	}
 
+
+	
+@PostMapping("/putStructure/Details1")
+public ResponseEntity<Object> createDetails2(@Valid @RequestBody FillDetails request, BindingResult bindingResult) {
+    // if (bindingResult.hasErrors()) {
+    // 	System.out.println("binding results");
+    //     Map<String, String> fieldErrors = bindingResult.getFieldErrors().stream()
+    //             .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+    //     return ResponseEntity.badRequest().body(fieldErrors);
+    // }
+    	String eligibilityCheck = propertyInsuranceService.checkEligibility1(request);
+        System.out.println(eligibilityCheck);
+        if (eligibilityCheck == "Records are present") {
+        	System.out.println("eligibity results");
+            return ResponseEntity.status(409).body("You are not eligible for this policy as the record already exists with the provided details");
+        }
+        else
+        {
+        	return ResponseEntity.ok().body("StructureAndDetails created successfully");
+        }
+
+}
 
 
 	

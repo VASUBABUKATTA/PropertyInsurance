@@ -18,6 +18,7 @@ import com.insurance.www.repository.PropertyInsuranceRepository;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.Image;
@@ -72,6 +73,7 @@ public class InvoiceService {
 	private void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(new Color(253, 240, 213));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setPadding(5);
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
@@ -97,19 +99,35 @@ public class InvoiceService {
     }
 
     private void writeTableData(PdfPTable table) {
-    	
-    		table.addCell(propertyDetails.get(0).getMarketValue());
+        PdfPCell cell = new PdfPCell();
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(8);
+  
+
+
+        cell.setPhrase(new Phrase(propertyDetails.get(0).getMarketValue()));
+    	table.addCell(cell);
+
     		// table.addCell(quoteDetails.get(0).getPremium().toString());
-            table.addCell(String.valueOf(quoteDetails.get(0).getPremium()));
-        	table.addCell(String.valueOf(quoteDetails.get(0).getYear()));
+
+            cell.setPhrase(new Phrase(String.valueOf(quoteDetails.get(0).getPremium())));
+            table.addCell(cell);
+      
+        	cell.setPhrase(new Phrase(String.valueOf(quoteDetails.get(0).getYear())));
+            table.addCell(cell);
+    	
+    	    cell.setPhrase(new Phrase(fullDetails.get(0).getPropertyhouseNo()+", "+fullDetails.get(0).getPropertystreetNo()+", "+fullDetails.get(0).getPropertycity()+", "+fullDetails.get(0).getPropertystate()+","+fullDetails.get(0).getPropertypincode()));
+    		table.addCell(cell);
     	
     	
-    		table.addCell(fullDetails.get(0).getPropertyhouseNo()+", "+fullDetails.get(0).getPropertystreetNo()+", "+fullDetails.get(0).getCity()+", "+fullDetails.get(0).getState()+","+fullDetails.get(0).getPincode());
-    	
-    	
-    		table.addCell(quoteDetails.get(0).getStartingDate().toString());
-            table.addCell(quoteDetails.get(0).getExpiryDate().toString());
-    	
+            cell.setPhrase(new Phrase(quoteDetails.get(0).getStartingDate().toString()));
+    		table.addCell(cell);
+
+            cell.setPhrase(new Phrase(quoteDetails.get(0).getExpiryDate().toString()));
+            table.addCell(cell);
+      
+            
+            cell.setPhrase(new Phrase(quoteDetails.get(0).getExpiryDate().toString()));
     	
     	
     }
@@ -142,7 +160,7 @@ public class InvoiceService {
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
             headerFont.setSize(25);
             headerFont.setColor(new Color(120, 0, 0));
-            Paragraph pHeader = new Paragraph("RS Insurance Pvt ltd. \n", headerFont);
+            Paragraph pHeader = new Paragraph("RS Insurance Pvt Ltd. \n", headerFont);
             pHeader.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(pHeader);
 
@@ -183,32 +201,79 @@ public class InvoiceService {
             pC.add("Email: " + signupDetails.get(0).getEmail());
             document.add(pC);
 
+          
+
+            // Font fontName = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            // fontName.setSize(22);
+            // fontName.setColor(new Color(120, 0, 0));
+            // Paragraph p = new Paragraph("Dear "+signupDetails.get(0).getName()+", invoice Details as follows:", fontName);
+            // p.setAlignment(Paragraph.ALIGN_LEFT);
+            // document.add(p);
+
             // Add transaction section header
             Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
             font.setSize(22);
             font.setColor(new Color(120, 0, 0));
-            Paragraph p = new Paragraph("\n Invoice\n", font);
-            p.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(p);
+            Paragraph p1 = new Paragraph("\n Invoice\n  ", font);
+            p1.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(p1);
+
+            Font fontName = FontFactory.getFont(FontFactory.HELVETICA);
+            fontName.setSize(15);
+            fontName.setColor(Color.BLACK);
+            
+    // Retrieve the name
+    String name = signupDetails.get(0).getName()+", ";
+
+    // Define fonts
+    Font normalFont = FontFactory.getFont(FontFactory.TIMES, 15, Font.NORMAL);
+    Font boldFont = FontFactory.getFont(FontFactory.TIMES, 15, Font.BOLD);
+
+    // Create chunks for the parts of the paragraph
+    Chunk chunk1 = new Chunk("Dear ", normalFont);
+    Chunk chunk2 = new Chunk(name, boldFont);
+    // Chunk chunk3 = new Chunk(", invoice Details as follows: ", normalFont);
+    // Chunk chunk3 = new Chunk(", invoice Details as follows: ", normalFont);
+    Chunk chunk3 = new Chunk("PolicyID: RSPI"+quoteDetails.get(0).getId(), normalFont);
+
+    // Combine chunks into a paragraph
+    Paragraph p = new Paragraph();
+    p.add(chunk1);
+    p.add(chunk2);
+    p.add(new Chunk(glue));
+    p.add(chunk3);
+
+    // Add the paragraph to the document
+    document.add(p);
+    Paragraph ps = new Paragraph("\n");
+    document.add(ps);
+
 
             // Add statement range
-//            Font fontStatementRange = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-//            fontStatementRange.setSize(14);
-//            fontStatementRange.setColor(new Color(120, 0, 0));
-//            Paragraph pStatementRange = new Paragraph("\n ", fontStatementRange);
-//            pStatementRange.setAlignment(Paragraph.ALIGN_LEFT);
-//            document.add(pStatementRange);
+        //    Font fontStatementRange = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        //    fontStatementRange.setSize(14);
+        //    fontStatementRange.setColor(new Color(120, 0, 0));
+        //    Paragraph pStatementRange = new Paragraph("PolicyID: RSPI"+quoteDetails.get(0).getId(), fontStatementRange);
+        //    pStatementRange.setAlignment(Paragraph.ALIGN_LEFT);
+        //    document.add(pStatementRange);
 
             // Add table
             PdfPTable table = new PdfPTable(6);
             table.setWidthPercentage(100f);
-            table.setWidths(new float[]{2.0f, 2.0f, 1.0f, 3.0f, 2.5f, 2.5f});
+            table.setWidths(new float[]{2.0f, 2.0f, 1.0f, 3.6f, 2.2f, 2.2f});
             table.setSpacingBefore(10);
 
             writeTableHeader(table);
             writeTableData(table);
 
             document.add(table);
+
+            // Font footerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            // footerFont.setSize(12);
+            // footerFont.setColor(new Color(120, 0, 0));
+            // Paragraph fHeader = new Paragraph("\n \n \n Thank you for choosing Rs Insurance.If any querys feel free to Contact us at support@ramanasoft.com or 1800-258-2465. \n");
+            // fHeader.setAlignment(Paragraph.ALIGN_CENTER);
+            // document.add(fHeader);
             
             Font fontP1 = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
             fontP1.setSize(18);
@@ -246,7 +311,7 @@ public class InvoiceService {
             Font footerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
             footerFont.setSize(12);
             footerFont.setColor(new Color(120, 0, 0));
-            Paragraph fHeader = new Paragraph("\n Thank you choosing Rs Insurance.If any querys feel free to Contact us at support@ramanasoft.com or 1800-258-2465 \n");
+            Paragraph fHeader = new Paragraph("\n Thank you for choosing Rs Insurance.If any querys feel free to Contact us at support@ramanasoft.com or 1800-258-2465. \n");
             fHeader.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(fHeader);
         } catch (Exception e) {
