@@ -53,7 +53,7 @@ function PaymentPage() {
  const Propertystate=state?.userDetails?.propertystate;
 // data from premium page:
   const year = premiumData?.year;
-  const premium = premiumData?.premium;
+  const premium = Math.round(premiumData?.premium);
   
   const fillDetailsAlluserRelated=state?.userDetails
   console.log(JSON.stringify(fillDetailsAlluserRelated));
@@ -93,7 +93,7 @@ useEffect(() => {
   // }
 }, [mobileno]);
  
-  const amount = premium * 100;
+  const amount = parseInt(premium) * 100 ;
 
   const [disabled, setDisabled] = useState(true);
  
@@ -189,7 +189,7 @@ console.log(fillDetailsAlluserRelated.propertycity,fillDetailsAlluserRelated.pro
   const options = {
     key: 'rzp_test_Su4WV4zdBIGTmZ', 
     entity:var4,
-    amount: amount, 
+    amount: Math.round(amount), 
     name: 'Ramana Soft Insurance Company',
     description: 'IS A INSURANCE COMPANY',
     image: p4,

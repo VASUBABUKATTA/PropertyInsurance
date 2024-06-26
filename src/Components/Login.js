@@ -99,6 +99,13 @@ function Login() {
         
         if (!regexMobileNo.test(value)) {
           setValidationErrors({ ...validationErrors, [name]: "Phone No. must start with 6,7,8,9 series with  10 digits" });
+          setshowOTPInput(false);
+          setData('');
+          setButtonText('Send OTP');
+          setButtonDisabled(false);
+          setTimer(0);
+          setAttempts(0);
+          setNewErr('')
         } else {
           setValidationErrors({ ...validationErrors, [name]: "" });
         }
@@ -151,11 +158,32 @@ function Login() {
     const [showOTPInput,setshowOTPInput]=useState(false);
     const [verifyotp,SetVerifyOtp]=useState("");
 
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [buttonText, setButtonText] = useState('Send OTP');
+    const [timer, setTimer] = useState(0);
+    const [attempts, setAttempts] = useState(0);
+
+    useEffect(() => {
+      let interval;
+      if (timer > 0) {
+        interval = setInterval(() => {
+          setTimer((prev) => prev - 1);
+        }, 1000);
+      } else if (timer === 0 && buttonDisabled && attempts < 3) {
+        setButtonDisabled(false);
+        setButtonText('Resend OTP');
+        clearInterval(interval);
+      }
+      return () => clearInterval(interval);
+    }, [timer, buttonDisabled]);
+
+    const [newErr,setNewErr] = useState();
   
       const sendOTP =async(e)=>{
 
       e.preventDefault();
       if(regexMobileNo.test(values.mobileno)){
+        
         PropertyInsuranceService.checkMobileNumber(values.mobileno).then((res)=>
         {
           console.log(res.data);
@@ -163,6 +191,16 @@ function Login() {
           if(res.data === "Mobile number exists"){
             PropertyInsuranceService.getOtp1().then((res)=>
             {
+              if (attempts >= 3) {
+                setButtonText('Try Later');
+                setButtonDisabled(true);
+                return;
+              }
+              
+              setButtonDisabled(true);
+              setTimer(20); 
+              setAttempts((prev) => prev + 1)
+
               console.log(res.data);
               const otpValue=res.data;
               SetEnterOtp(res.data);
@@ -172,10 +210,12 @@ function Login() {
               console.log(res);
             }).catch((err)=>
           {
-
+            // alert(err+"erver down");
           });
             }).catch((error)=>
-          {})
+          {
+            // alert(error+"Server down");
+          })
 
           console.log(showOTPInput);
             setshowOTPInput(true);
@@ -186,6 +226,11 @@ function Login() {
           }
           })
               
+              }
+
+              else if (values.mobileno === '' || 0 || null){
+                setNewErr('Please Enter Mobile Number');
+                setValidationErrors('')
               }
               else {setData("")
                 
@@ -246,11 +291,12 @@ function Login() {
                   }}
                   />
                   <span>
-                <button className='btn btn-success rounded fw-bold shadow mt-2 mx-2 ms-3 py-2' onClick={sendOTP}>Send OTP</button></span>
+                <button className='btn btn-success rounded fw-bold shadow mt-2 mx-1 ms-3 py-2' onClick={sendOTP} disabled={buttonDisabled}>{buttonDisabled ? (attempts < 3 ? `Resend OTP in ${timer}s` : 'Try Later') : buttonText}</button></span>
                   <br/>
                   <small>
                   {validationErrors.mobileno && <span className="text-danger">{validationErrors.mobileno}</span>}</small>
                   {data === "Mobile number is not exists" && <h4 className='text-danger mt-2 ms-lg-3'>{data}</h4>}
+                  <h6 className='text-danger mt-1'>{newErr}</h6>
                 {showOTPInput && (
                   <div>
                      <div className='ms-2 mt-2'>
@@ -357,7 +403,7 @@ function Login() {
                     </div>
                     <div className='col-8 col-lg-9'>
                       <p className='text-secondary fw-bold '>For Customer Care</p>
-                      <h4 className='fw-bold'>1800-258-2465</h4>
+                      <h4 className='fw-bold'>1800-143-123</h4>
                     </div>
                   </div>
                 </div>

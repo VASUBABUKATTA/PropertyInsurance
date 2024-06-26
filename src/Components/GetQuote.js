@@ -127,6 +127,23 @@ function GetQuote() {
 
   const [showOTPInput, setshowOTPInput] = useState(false);
 
+  const [otpSent, setOtpSent] = useState(false);
+  const [resendActive, setResendActive] = useState(false);
+  const [timer, setTimer] = useState(20);
+  const [resendCount, setResendCount] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (otpSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setResendActive(true);
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, timer]);
 
   function sendOTP(e) {
     e.preventDefault();
@@ -144,9 +161,12 @@ function GetQuote() {
             const mobileNumber = values.mobileno;
             PropertyInsuranceService.getOtp(mobileNumber, otpValue).then((res) => {
               console.log(res);
-            }).catch((err) => {
-
-            });
+            }).catch((err) => {});
+            setOtpSent(true);
+            setmobileverified('OTP Sent');
+            setTimer(20);
+            setResendActive(false);
+            setResendCount(0);
           }).catch((error) => { })
 
           console.log(showOTPInput);
@@ -164,9 +184,57 @@ function GetQuote() {
       setshowOTPInput(false);
     }
   }
+
+  const resendOTPMobile = (e) => {
+    e.preventDefault();
+    if (resendCount < 2 && regexMobileNo.test(feilds.mobileno)) {
+      PropertyInsuranceService.checkMobileNumber(feilds.mobileno).then((res) => {
+        console.log(res.data);
+        setData(res.data);
+  
+        if (res.data === "Mobile number is not exists") {
+          PropertyInsuranceService.getOtp1().then((res) => {
+            console.log(res.data);
+            const otpValue = res.data;
+            setOtp(res.data);
+            const mobileNumber = feilds.mobileno;
+            PropertyInsuranceService.getOtp(mobileNumber, otpValue).then((res) => {
+              console.log(res);
+            }).catch((err) => {});
+  
+            setResendActive(false);
+            setTimer(20);
+            setResendCount((prevCount) => prevCount + 1);
+          }).catch((error) => {});
+        } else if (res.data === "Mobile number exists") {
+          setshowOTPInput(false);
+        }
+      });
+    }
+  };
+
   const [premiumIntialValue,SetPremiumIntialValue]=useState("");
   const initialValue = 0.0005;
   const securityInitialValue = security === "Yes" ? 0 : 0.0002;
+
+  const [inputs,setInputs]=useState({
+    marKetValue:"",
+    buildingAge:"",
+    securityCheck:""
+  });
+
+
+//  useEffect(()=>{
+
+    inputs.marKetValue =String(marketValue) ;
+    inputs.buildingAge =String(buildingAge) ;
+    inputs.securityCheck =String(security) ;
+
+    console.log(JSON.stringify(inputs),inputs.marKetValue);
+     PropertyInsuranceService.premium_caliculation(inputs).then((res)=>{console.log(res);SetPremiumIntialValue(res.data)}).catch(()=>{});
+//      setState1(false);
+    
+//  },[marketValue])
 
 const CaliculatePremium =()=>
   {
@@ -189,32 +257,56 @@ const CaliculatePremium =()=>
     CaliculatePremium();
   }, [buildingAge, security, marketValue]);
 
+  // const caliculate1 =()=>
+  //   {
+  //     // CaliculatePremium();
+  //     CaliculatePremium();
+  //     setPremium(Math.round(premiumIntialValue))
+  //   };
+  // const caliculate2 =()=>{
+  //   CaliculatePremium();
+  //   let premiumDiscount = (premiumIntialValue/100)*10 ; // 0.1%
+  //   setPremium(Math.round((premiumIntialValue * 2)-premiumDiscount));
+  // };
+  // const caliculate3 =()=>{
+  //   CaliculatePremium();
+  //   let premiumDiscount = (premiumIntialValue/100)*15 ; // 0.15%
+  //   setPremium(Math.round((premiumIntialValue * 3)-premiumDiscount));
+  // };
+  // const caliculate4 =()=>{
+  //   CaliculatePremium();
+  //   let premiumDiscount = (premiumIntialValue/100)*20 ; // 0.2%
+  //   setPremium(Math.round((premiumIntialValue * 4)-premiumDiscount));
+  // };
+  // const caliculate5 =()=>{
+  //   CaliculatePremium();
+  //   let premiumDiscount = (premiumIntialValue/100)*25 ; // 0.25%
+  //   setPremium(Math.round((premiumIntialValue * 5)-premiumDiscount));
+  // };
   const caliculate1 =()=>
     {
-      // CaliculatePremium();
-      CaliculatePremium();
-      setPremium(premiumIntialValue)
+      setPremium(Math.round(premiumIntialValue));
     };
   const caliculate2 =()=>{
     CaliculatePremium();
     let premiumDiscount = (premiumIntialValue/100)*10 ; // 0.1%
-    setPremium((premiumIntialValue * 2)-premiumDiscount);
+    setPremium(Math.round((premiumIntialValue * 2)-premiumDiscount));
   };
   const caliculate3 =()=>{
     CaliculatePremium();
     let premiumDiscount = (premiumIntialValue/100)*15 ; // 0.15%
-    setPremium((premiumIntialValue * 3)-premiumDiscount);
+    setPremium(Math.round((premiumIntialValue * 3)-premiumDiscount));
   };
   const caliculate4 =()=>{
     CaliculatePremium();
     let premiumDiscount = (premiumIntialValue/100)*20 ; // 0.2%
-    setPremium((premiumIntialValue * 4)-premiumDiscount);
+    setPremium(Math.round((premiumIntialValue * 4)-premiumDiscount));
   };
   const caliculate5 =()=>{
     CaliculatePremium();
     let premiumDiscount = (premiumIntialValue/100)*25 ; // 0.25%
-    setPremium((premiumIntialValue * 5)-premiumDiscount);
-  };
+    setPremium(Math.round((premiumIntialValue * 5)-premiumDiscount));
+  }
   
   // const caliculate1 = () => {
   //   if (marketValue === undefined) {
@@ -819,7 +911,24 @@ const CaliculatePremium =()=>
   const [MobileOTPInput, setMobileOTPInput] = useState(false);
   const [EmailOTPInput, setEmailshowOTPInput] = useState(false);
 
+  const [otpSentMail, setOtpSentMail] = useState(false);
+  const [resendActiveMail, setResendActiveMail] = useState(false);
+  const [timerMail, setTimerMail] = useState(20);
+  const [resendCountMail, setResendCountMail] = useState(0);
 
+
+  useEffect(() => {
+    let intervalMail;
+    if (otpSentMail && timerMail > 0) {
+      intervalMail = setInterval(() => {
+        setTimerMail((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timerMail === 0) {
+      setResendActiveMail(true);
+      clearInterval(intervalMail);
+    }
+    return () => clearInterval(intervalMail);
+  }, [otpSentMail, timerMail]);
 
   // function sendOTP(e){
   // e.preventDefault();
@@ -841,6 +950,11 @@ const CaliculatePremium =()=>
             SetemailOtp(res.data);
           })
           console.log(EmailOTPInput);
+          setOtpSentMail(true);
+          setemailverified('OTP Sent');
+          setTimerMail(20);
+          setResendActiveMail(false);
+          setResendCountMail(0);
         }
       })
     }
@@ -849,6 +963,26 @@ const CaliculatePremium =()=>
       setEmailshowOTPInput(false);
     }
 
+  }
+
+  function resendOTPMail(e){
+    e.preventDefault();
+    if(resendCountMail < 2 && regexEmail.test(feilds.email)){
+      PropertyInsuranceService.checkEmail(feilds.email).then((res)=>{
+        console.log(res.data);
+        setData1(res.data)
+    
+        if(res.data==="Email is not exists"){
+          PropertyInsuranceService.sendEmailotp(feilds.email).then((res)=>{
+            SetemailOtp(res.data);
+          })
+          console.log(EmailOTPInput);
+          setResendActiveMail(false);
+          setTimerMail(20);
+          setResendCountMail((prevCount)=>prevCount+1)
+        }
+      })
+    }
   }
 
 
@@ -893,6 +1027,8 @@ const CaliculatePremium =()=>
 
   const [showMailInput,setShowMailInput] = useState(false);
   const [showMail1,setShowMail1] = useState(false);
+
+  
 
   const HandleMailInput=(e)=>{
     e.preventDefault();
@@ -988,7 +1124,7 @@ const CaliculatePremium =()=>
                 <div className='col-lg-8'>
                   <p class="card-text ">Our agent can help you to buy the best home insurance!</p>
                   <button className="btn fw-bold text-primary border mb-1"><PhoneIcon />Talk to Expert</button><br />
-                  <span className=''>(1800-143-143)</span>
+                  <span className=''>(1800-143-123)</span>
                 </div>
               </div>
             </div>
@@ -1199,7 +1335,7 @@ const CaliculatePremium =()=>
                   <FormHelperText style={{color: 'red'}}>{validationErrors.email}</FormHelperText>
                 </div>
                 <div style={{ float: 'right' }} className='col-12 col-lg-4'>
-                  <button className='btn btn-success px-3 py-2 rounded mt-2 fw-bold shadow verification' disabled={emailverified === "verified 🗸"} onClick={sendemailOTP}>{emailverified}</button>
+                  <button className='btn btn-success px-3 py-2 rounded mt-2 fw-bold shadow verification' disabled={emailverified === "verified 🗸" || otpSentMail} onClick={sendemailOTP}>{emailverified}</button>
                 </div>
                 {data1 === "Email is exists" && <h5 className='text-danger'>{data1}</h5>}
                 {EmailOTPInput && (
@@ -1238,6 +1374,17 @@ const CaliculatePremium =()=>
                         <button className='btn btn-info text-nowrap fw-bold shadow ms-3' onClick={handleverifyEmailOtp}>Verify OTP</button>
                       </form>
                       {verifyemailmsg === "Invalid OTP...!" && <h5 className='mt-2 ms-2 text-danger'>{verifyemailmsg}</h5>}
+                      {otpSentMail && (
+                        <>
+                          <button
+                            className='btn btn-link'
+                            onClick={resendOTPMail}
+                            disabled={!resendActiveMail || resendCountMail >= 2}
+                          >
+                            {resendCountMail >= 2 ? 'Try later' : (resendActiveMail ? 'Resend OTP' : `Resend OTP in ${timerMail} sec`)}
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
@@ -1287,7 +1434,7 @@ const CaliculatePremium =()=>
                 </div>
 
                 <div style={{ float: 'right' }} className='col-12 col-lg-4'>
-                  <button className='btn btn-success px-3 py-2 rounded mt-2 fw-bold shadow' disabled={mobileverified === "verified 🗸"} onClick={sendOTP}>{mobileverified}</button>
+                  <button className='btn btn-success px-3 py-2 rounded mt-2 fw-bold shadow' disabled={mobileverified === "verified 🗸" || otpSent} onClick={sendOTP}>{mobileverified}</button>
                 </div>
                 {data === "Mobile number exists" && <h5 className='text-danger'>{data}</h5>}
                 {showOTPInput && (
@@ -1324,7 +1471,17 @@ const CaliculatePremium =()=>
                         <button className='btn btn-info text-nowrap fw-bold shadow ms-3' onClick={handleverifyMobileOtp}>Verify OTP</button>
                       </form>
                       {verifymobilmsg === "Invalid OTP...!" && <h5 className='mt-2 ms-2 text-danger'>{verifymobilmsg}</h5>}
-
+                      {otpSent && (
+                        <>
+                          <button
+                            className='btn btn-link'
+                            onClick={resendOTPMobile}
+                            disabled={!resendActive || resendCount >= 2}
+                          >
+                            {resendCount >= 2 ? 'Try later' : (resendActive ? 'Resend OTP' : `Resend OTP in ${timer} sec`)}
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}

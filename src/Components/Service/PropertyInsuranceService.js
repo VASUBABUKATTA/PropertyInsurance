@@ -2,6 +2,8 @@ import axios from 'axios';
 // import Header from '../Header';
 const url ="http://122.169.207.194:9092/api/v1";
 
+//122.169.207.194:9092
+
 class PropertyInsuranceService {
 
     static createDetails(values) {
@@ -79,7 +81,18 @@ class PropertyInsuranceService {
         // const a={s,d}
         const INSURANCE_API_BASE_URL = "http://122.169.207.194:9092/api/v1/checkMobileNumber/"+s;
         return axios.get(INSURANCE_API_BASE_URL);
-                
+        // .catch(err=>
+        //     {
+        //         if(!err.response)
+        //             {
+        //                 alert("Server down, Please try again later");
+        //             }
+        //             else{
+        //                 alert("error occured");
+        //             }
+        //             throw err;
+        //     }
+        // )
     }
 
     static checkEmail(emailId)
@@ -145,6 +158,31 @@ class PropertyInsuranceService {
      static invoiceDowload(paymentId)
      {
         const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/v1/create/${paymentId}`;
+        return axios.get(INSURANCE_API_BASE_URL);
+     }
+     static verifyPropertyAddressDetails (verifyPropertyAddressDetails)
+     {
+        const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/v1/putStructure/Details1`;
+        return axios.post(INSURANCE_API_BASE_URL,verifyPropertyAddressDetails);
+     }
+     static premium_caliculation(inputs)
+     {
+        const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/premium/caliculatePremium`;
+        return axios.post(INSURANCE_API_BASE_URL,inputs);
+     }
+     static getPremiumAllDetails()
+     {
+        const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/premium/getAll/premiumCaliculation/values`;
+        return axios.get(INSURANCE_API_BASE_URL,);
+     }
+     static addPremiumDetails(formData)
+     {
+        const INSURANCE_API_BASE_URL=`http://122.169.207.194:9092/api/premium/addPremiumDetails`;
+        return axios.post(INSURANCE_API_BASE_URL,formData);
+     }
+     static  setPremiumDetails(id)
+     {
+        const INSURANCE_API_BASE_URL="http://122.169.207.194:9092/api/premium/premiumAmount/fetch/"+id;
         return axios.get(INSURANCE_API_BASE_URL);
      }
 

@@ -14,6 +14,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorPage from './Components/ErrorPage';
 import PaymentSuccessPage from './Components/PaymentComponent/PaymentSuccess';
+import AdminLoginCredentials from './Components/Admin/AdminLoginCredentials';
+import AdminHomePage from './Components/Admin/AdminHome';
 
 const clientId = "246541673533-e90kj0pumgndrmt51j27v853d3pkon00.apps.googleusercontent.com";
 
@@ -49,6 +51,8 @@ function App() {
               <Route path="/payment" element={<PaymentPage/>}/>
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/paymentsuccess" element={<PaymentSuccessPage/>}/>
+              <Route path="/adminlogin" element={<AdminLoginCredentials/>}/>
+              <Route path="/adminhome" element={<AdminHomePage/>}/>
             </Route>
           </Routes>
         </div>

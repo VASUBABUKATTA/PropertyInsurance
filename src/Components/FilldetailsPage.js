@@ -39,6 +39,25 @@ function FilldetailsPage()
   var mobileno = location.state?.mobileno;
   var emailId = location.state?.emailId;
 
+  const [verifyPropertyAddressDetails]=useState({
+    gender:"",
+    fullname:"",
+    pancard:"",
+    dob:"",
+    propertypincode:"",
+    propertyhouseNo:"",
+    propertystreetNo:"",
+    propertycity:"",
+    propertystate:"",
+    currentaddress:"",
+    houseno:"",
+    streetno:"",
+    city:"",
+    state:"",
+    pincode:"",
+    paymentId: '',
+  })
+
   // customer Id:
   const startingCustomerId = location.state?.startingCustomerId;
 
@@ -355,6 +374,46 @@ useEffect(() => {
   }
 }, []);
 
+const HandleVerifyPropertyaddressDetails = () => {
+  
+  verifyPropertyAddressDetails.propertyhouseNo = data.propertyhouseNo;
+  verifyPropertyAddressDetails.propertystreetNo = data.propertystreetNo;
+  verifyPropertyAddressDetails.propertypincode = pincode;
+  verifyPropertyAddressDetails.propertycity = data.propertycity ;
+  verifyPropertyAddressDetails.propertystate = data.propertystate;
+
+  verifyPropertyAddressDetails.gender = data.gender;
+  verifyPropertyAddressDetails.currentaddress = data.currentaddress;
+  verifyPropertyAddressDetails.pancard = data.pancard;
+  verifyPropertyAddressDetails.dob=data.dob;
+  verifyPropertyAddressDetails.fullname = data.fullname;
+
+  verifyPropertyAddressDetails.pincode = (data.currentaddress === 'yes') ? pincode : data.pincode;
+  verifyPropertyAddressDetails.houseno = (data.currentaddress === 'yes') ? data.propertyhouseNo : data.houseno;
+  verifyPropertyAddressDetails.streetno = (data.currentaddress === 'yes') ? data.propertystreetNo : data.streetno;
+  verifyPropertyAddressDetails.city = (data.currentaddress === 'yes') ? data.propertycity : data.city;
+  verifyPropertyAddressDetails.state = (data.currentaddress === 'yes') ? data.propertystate : data.state;
+  
+  // console.log(data);
+
+  console.log("hi :" + JSON.stringify(verifyPropertyAddressDetails));
+
+  // PropertyInsuranceService.verifyPropertyAddressDetails(verifyPropertyAddressDetails).then((res)=>{
+  //   console.log(res.data);
+  //   setAllow1(res.data);
+  //   setAllow("");
+  // }).catch((error)=>{
+  //   if (error.response && error.response.status === 409) {
+  //     const errorMsg = Error: ${error.response.data};
+  //         // alert(errorMsg);
+  //         setAllow(errorMsg);
+  //     console.log(allow);
+  //   } 
+  // });
+
+}
+
+
 
 
   let navigate=useNavigate();
@@ -363,6 +422,27 @@ useEffect(() => {
   {
     navigate("/");
   }
+
+
+  const navigationLogic =(e)=>
+    {
+      // e.preventDefault();
+      
+      if(data.currentaddress === "yes" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo) && regexStreet.test(data.propertystreetNo) && data.mobno!== ("" || undefined))
+        {
+           navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData,userDetails : data}});
+            console.log("ji");
+          
+        }
+        else {if(data.currentaddress === "no" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo)  && regexStreet.test(data.propertystreetNo) && integerRege6.test(data.pincode) && regexHouseNo.test(data.houseno) && regexStreet.test(data.streetno) && data.mobno!== ("" || undefined)){
+         console.log(data);
+          navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData , userDetails : data}});    
+        }}
+   
+      
+    }
+
+    const [allow,setAllow]=useState("");
 
   const handleSubmit =(e)=>
   {
@@ -375,18 +455,34 @@ useEffect(() => {
       e.preventDefault(); 
       console.log(data.mobno);
       // return; // Stop further execution
-    
+    HandleVerifyPropertyaddressDetails();
       console.log(data);
-  if(data.currentaddress === "yes" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo) && regexStreet.test(data.propertystreetNo) && data.mobno!== ("" || undefined))
-  {
-     navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData,userDetails : data}});
-      console.log("ji");
+      PropertyInsuranceService.verifyPropertyAddressDetails(verifyPropertyAddressDetails).then((res)=>{
+        console.log(res.data);
+        if(res.data=== "StructureAndDetails created successfully")
+          {
+            navigationLogic(e);
+          }
+        setAllow("");
+      }).catch((error)=>{
+        if (error.response && error.response.status === 409) 
+          {
+          const errorMsg = `Error: ${error.response.data}`;
+              // alert(errorMsg);
+              setAllow(errorMsg);
+          console.log(allow);
+        } 
+      });
+  // if(data.currentaddress === "yes" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo) && regexStreet.test(data.propertystreetNo) && data.mobno!== ("" || undefined))
+  // {
+  //    navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData,userDetails : data}});
+  //     console.log("ji");
     
-  }
-  else {if(data.currentaddress === "no" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo)  && regexStreet.test(data.propertystreetNo) && integerRege6.test(data.pincode) && regexHouseNo.test(data.houseno) && regexStreet.test(data.streetno) && data.mobno!== ("" || undefined)){
-   console.log(data);
-    navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData , userDetails : data}});    
-  }}
+  // }
+  // else {if(data.currentaddress === "no" && regexUsername.test(data.fullname) && regexPanCard.test(data.pancard) && regexHouseNo.test(data.propertyhouseNo)  && regexStreet.test(data.propertystreetNo) && integerRege6.test(data.pincode) && regexHouseNo.test(data.houseno) && regexStreet.test(data.streetno) && data.mobno!== ("" || undefined)){
+  //  console.log(data);
+  //   navigate("/payment",{state:{marketValue,security,emailId,mobileno,squareFeet,buildingAge,pincode,person,effected,startingCustomerId,formData,premiumData , userDetails : data}});    
+  // }}
   // Save form data to session storage
   sessionStorage.setItem('formData', JSON.stringify(data));
 
@@ -628,6 +724,9 @@ console.log(data);
                         />
                         <br/>
                         {validationErrors.propertypincode && <span className="text-danger">{validationErrors.propertypincode}</span>}
+                      </div>
+                      <div className='text-center mt-2'>
+                        {allow === "Error: You are not eligible for this policy as the record already exists with the provided details" && <h5 className='text-danger'>Property details already exists</h5>}
                       </div>
                       <div className='row mt-3'>
                         <label class="control-label" ><span className='fw-semibold text-secondary'> Above is Current Address </span>

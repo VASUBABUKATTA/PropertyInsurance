@@ -557,119 +557,228 @@ console.log(signUpDetails,contact.mobileno)
           };
         }, []);};
         BlockReload();
+    // const interartingCustomerDetails = () => {
+    //     return (
+    //         <div>
+    //         {fillDetails.length === 0 ? (
+    //             <>
+    //             <h3 className="text-center fw-bold text-secondary mt-4"><button onClick={HandleNewPolicy} className='btn btn-link fw-bold fs-4'>Buy any policy</button></h3>
+    //             </>
+    //         ) : (
+    //             fillDetails.map((_, index) => (
+    //                 <div key={index}>
+    //                     <div className="card shadow mt-3 fillOutPage">
+    //                         <div className="card-header pcdetails d-flex justify-content-between flex-wrap">
+    //                             <h4 className="text-start fw-bold text-secondary">
+    //                                 Property Insurance : {index + 1}
+    //                             </h4>
+    //                             <h5 className="text-end mt-2 mt-md-0">
+    //                                 {/* <span className="fw-bold text-secondary"> Policy ID :</span> */}
+    //                                 <span className="fw-bold text-secondary">Customer ID :</span>
+    //                                 {paymentDetails[index]?.customerId}
+    //                             </h5>
+    //                         </div>
+    //                         <div className="card-body">
+    //                             <div className="row pcdetails">
+    //                                 <div className="col-md-6" style={{borderRight:'solid 2px #dcdcdc'}}>
+    //                                     <p className="card-text fw-bold">
+    //                                         Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp; {fillDetails[index]?.fullname}
+    //                                         </span>
+    //                                     </p>
+    //                                     {/* 
+    //                                     <p className="card-text fw-bold">
+    //                                         Email &nbsp;&nbsp;&nbsp;: <span className="fw-bold text-secondary">
+    //                                             {signUpDetails[0]?.email}
+    //                                         </span>
+    //                                     </p>
+    //                                     <p className="card-text fw-bold">
+    //                                         Mobile&nbsp; :<span className="fw-bold text-secondary"> {mobileno}</span>
+    //                                     </p> 
+    //                                     */}
+    //                                     <p className="card-text fw-bold">
+    //                                         Property Value &nbsp;&nbsp;&nbsp; : 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp;{StrucutureDetails[index]?.marketValue}
+    //                                         </span>
+    //                                     </p>
+    //                                     <p className="card-text fw-bold">
+    //                                         Square Feet &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp;{StrucutureDetails[index]?.squareFeet}
+    //                                         </span>
+    //                                     </p>
+    //                                     <div className='d-flex'>
+    //                                     <p className="card-text fw-bold col-4">
+    //                                 Address &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: </p>
+    //                                 <span className="fw-bold text-secondary col-8">
+    //                                 &nbsp;{fillDetails[index]?.propertyhouseNo} ,&nbsp;
+    //                                     {fillDetails[index]?.propertystreetNo} ,&nbsp;
+    //                                     {fillDetails[index]?.propertycity} , &nbsp;
+    //                                     {fillDetails[index]?.propertystate} ,&nbsp;
+    //                                     {fillDetails[index]?.propertypincode}
+                                    
+    //                                 </span>
+    //                                 </div>
+    //                                 </div>
+    //                                 <div className="col-md-6 mt-3 mt-md-0">
+    //                                     {/* 
+    //                                     <p className="card-text fw-bold">
+    //                                         Age of the building : <span className="fw-bold text-secondary">
+    //                                             {StrucutureDetails[index]?.buildingAge}
+    //                                         </span>
+    //                                     </p> 
+    //                                     */}
+    //                                     <p className="card-text fw-bold">
+    //                                         Premium Amount &nbsp; &nbsp;&nbsp;: 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp;₹ {paymentDetails[index]?.premium} /-
+    //                                         </span>
+    //                                     </p>
+    //                                     {/* 
+    //                                     <p className="card-text fw-bold">
+    //                                         Property Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+    //                                         <span className="fw-bold text-secondary"> 
+    //                                             {StrucutureDetails[index]?.marketValue}
+    //                                         </span>
+    //                                     </p> 
+    //                                     */}
+    //                                     <p className="card-text fw-bold">
+    //                                         No. of Years &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp;{paymentDetails[index]?.year}&nbsp;Years
+    //                                         </span>
+    //                                     </p>
+    //                                     <p className="card-text fw-bold">
+    //                                         Age of the building &nbsp; : 
+    //                                         <span className="fw-bold text-secondary">
+    //                                         &nbsp;{StrucutureDetails[index]?.buildingAge}
+    //                                         </span>
+    //                                     </p>
+    //                                 </div>
+    //                                 <div className='d-flex justify-content-end'>
+    //                                 <a className='btn btn-success' href={`http://192.168.1.3:9092/api/v1/create/${paymentDetails[index]?.paymentId}`} download='invoice' target='_blank'><i className="fa-solid fa-download me-2"></i>Invoice
+    //                                 </a>
+    //                             </div>
+    //                             </div>
+                                
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             ))
+    //         )}
+            
+    //     </div>
+    //     );
+    // };
+
     const interartingCustomerDetails = () => {
+        const verifiedDetails = [];
+    
+        for (let i = 0; i < paymentDetails.length; i++) {
+            const paymentId = paymentDetails[i]?.paymentId;
+    
+            for (let j = 0; j < StrucutureDetails.length; j++) {
+                if (StrucutureDetails[j]?.paymentId === paymentId) {
+                    for (let k = 0; k < fillDetails.length; k++) {
+                        if (fillDetails[k]?.paymentId === paymentId) {
+                            verifiedDetails.push({
+                                fillDetail: fillDetails[k],
+                                paymentDetail: paymentDetails[i],
+                                structureDetail: StrucutureDetails[j]
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    
         return (
             <div>
-            {fillDetails.length === 0 ? (
-                <>
-                <h3 className="text-center fw-bold text-secondary mt-4"><button onClick={HandleNewPolicy} className='btn btn-link fw-bold fs-4'>Buy any policy</button></h3>
-                </>
-            ) : (
-                fillDetails.map((_, index) => (
-                    <div key={index}>
-                        <div className="card shadow mt-3 fillOutPage">
-                            <div className="card-header pcdetails d-flex justify-content-between flex-wrap">
-                                <h4 className="text-start fw-bold text-secondary">
-                                    Property Insurance : {index + 1}
-                                </h4>
-                                <h5 className="text-end mt-2 mt-md-0">
-                                    {/* <span className="fw-bold text-secondary"> Policy ID :</span> */}
-                                    <span className="fw-bold text-secondary">Customer ID :</span>
-                                    {paymentDetails[index]?.customerId}
-                                </h5>
-                            </div>
-                            <div className="card-body">
-                                <div className="row pcdetails">
-                                    <div className="col-md-6" style={{borderRight:'solid 2px #dcdcdc'}}>
-                                        <p className="card-text fw-bold">
-                                            Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp; {fillDetails[index]?.fullname}
-                                            </span>
-                                        </p>
-                                        {/* 
-                                        <p className="card-text fw-bold">
-                                            Email &nbsp;&nbsp;&nbsp;: <span className="fw-bold text-secondary">
-                                                {signUpDetails[0]?.email}
-                                            </span>
-                                        </p>
-                                        <p className="card-text fw-bold">
-                                            Mobile&nbsp; :<span className="fw-bold text-secondary"> {mobileno}</span>
-                                        </p> 
-                                        */}
-                                        <p className="card-text fw-bold">
-                                            Property Value &nbsp;&nbsp;&nbsp; : 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp;{StrucutureDetails[index]?.marketValue}
-                                            </span>
-                                        </p>
-                                        <p className="card-text fw-bold">
-                                            Square Feet &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp;{StrucutureDetails[index]?.squareFeet}
-                                            </span>
-                                        </p>
-                                        <div className='d-flex'>
-                                        <p className="card-text fw-bold col-4">
-                                    Address &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: </p>
-                                    <span className="fw-bold text-secondary col-8">
-                                    &nbsp;{fillDetails[index]?.propertyhouseNo} ,&nbsp;
-                                        {fillDetails[index]?.propertystreetNo} ,&nbsp;
-                                        {fillDetails[index]?.propertycity} , &nbsp;
-                                        {fillDetails[index]?.propertystate} ,&nbsp;
-                                        {fillDetails[index]?.propertypincode}
-                                    
-                                    </span>
-                                    </div>
-                                    </div>
-                                    <div className="col-md-6 mt-3 mt-md-0">
-                                        {/* 
-                                        <p className="card-text fw-bold">
-                                            Age of the building : <span className="fw-bold text-secondary">
-                                                {StrucutureDetails[index]?.buildingAge}
-                                            </span>
-                                        </p> 
-                                        */}
-                                        <p className="card-text fw-bold">
-                                            Premium Amount &nbsp; &nbsp;&nbsp;: 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp;₹ {paymentDetails[index]?.premium} /-
-                                            </span>
-                                        </p>
-                                        {/* 
-                                        <p className="card-text fw-bold">
-                                            Property Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
-                                            <span className="fw-bold text-secondary"> 
-                                                {StrucutureDetails[index]?.marketValue}
-                                            </span>
-                                        </p> 
-                                        */}
-                                        <p className="card-text fw-bold">
-                                            No. of Years &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp;{paymentDetails[index]?.year}&nbsp;Years
-                                            </span>
-                                        </p>
-                                        <p className="card-text fw-bold">
-                                            Age of the building &nbsp; : 
-                                            <span className="fw-bold text-secondary">
-                                            &nbsp;{StrucutureDetails[index]?.buildingAge}
-                                            </span>
-                                        </p>
+                {verifiedDetails.length === 0 ? (
+                    <h3 className="text-center mt-4">
+                        <button className='mx-5 fs-4 btn btn-link' onClick={HandleNewPolicy}>Get any policy</button>
+                    </h3>
+                ) : (
+                    verifiedDetails.map((detail, index) => (
+                        <div key={index}>
+                            <div className="card shadow mt-3 fillOutPage">
+                                <div className="card-header pcdetails d-flex justify-content-between flex-wrap">
+                                    <h4 className="text-start fw-bold text-secondary">
+                                        RamanaSecure Living Insurance : {index + 1}
+                                    </h4>
+                                    <h5 className="text-end mt-2 mt-md-0">
+                                        <span className="fw-bold text-secondary">ID :</span>
+                                        {detail.paymentDetail.customerId}
+                                    </h5>
+                                </div>
+                                <div className="card-body">
+                                    <div className="row pcdetails">
+                                        <div className="col-md-6" style={{ borderRight: 'solid 2px #dcdcdc' }}>
+                                            <p className="card-text fw-bold">
+                                                Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                &nbsp;{detail.fillDetail.fullname}
+                                                </span>
+                                            </p>
+                                            <p className="card-text fw-bold">
+                                                Property Value &nbsp;&nbsp;&nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                    &nbsp;{detail.structureDetail.marketValue}
+                                                </span>
+                                            </p>
+                                            <p className="card-text fw-bold">
+                                                Square Feet &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                    &nbsp;{detail.structureDetail.squareFeet}
+                                                </span>
+                                            </p>
+                                            <div className='d-flex'>
+                                                <p className="card-text fw-bold col-4">
+                                                    Address &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;:
+                                                </p>
+                                                <span className="fw-bold text-secondary col-8">
+                                                    &nbsp;{detail.fillDetail.propertyhouseNo} ,&nbsp;
+                                                    {detail.fillDetail.propertystreetNo} ,&nbsp;
+                                                    {detail.fillDetail.propertycity} , &nbsp;
+                                                    {detail.fillDetail.propertystate} ,&nbsp;
+                                                    {detail.fillDetail.propertypincode}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 mt-3 mt-md-0">
+                                            <p className="card-text fw-bold">
+                                                Premium Amount &nbsp; &nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                    &nbsp;₹ {detail.paymentDetail.premium} /-
+                                                </span>
+                                            </p>
+                                            <p className="card-text fw-bold">
+                                                No. of Years &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                    &nbsp;{detail.paymentDetail.year}&nbsp;Years
+                                                </span>
+                                            </p>
+                                            <p className="card-text fw-bold">
+                                                Age of the building &nbsp;:
+                                                <span className="fw-bold text-secondary">
+                                                    &nbsp;{detail.structureDetail.buildingAge}
+                                                </span>
+                                            </p>
+                                        </div>
                                     </div>
                                     <div className='d-flex justify-content-end'>
-                                    <a className='btn btn-success' href={`http://122.169.207.194:9092/api/v1/create/${paymentDetails[index]?.paymentId}`} download='invoice' target='_blank'><i className="fa-solid fa-download me-2"></i>Invoice
-                                    </a>
+                                        <a className='btn btn-success' href={`http://122.169.207.194:9092/api/v1/create/${detail.paymentDetail.paymentId}`} download='invoice' target='_blank'>
+                                            <i className="fa-solid fa-download me-2"></i>Invoice
+                                        </a>
+                                    </div>
                                 </div>
-                                </div>
-                                
                             </div>
                         </div>
-                    </div>
-                ))
-            )}
-            
-        </div>
+                    ))
+                )}
+            </div>
         );
     };
 
